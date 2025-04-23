@@ -1,0 +1,55 @@
+2025-04-23 00:01:29.997 [pool-1-thread-1] INFO  c.connectfour.server.ClientHandler - Client gu requested disconnect: User closed application
+2025-04-23 00:01:30.007 [pool-1-thread-1] ERROR c.connectfour.server.ClientHandler - Error sending message to client: gu
+java.net.SocketException: Broken pipe
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:394)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:410)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1809)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1303)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1248)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1444)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1195)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1616)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:362)
+	at com.connectfour.server.ClientHandler.sendMessage(ClientHandler.java:238)
+	at com.connectfour.server.ClientHandler.disconnect(ClientHandler.java:256)
+	at com.connectfour.server.ClientHandler.handleDisconnectMessage(ClientHandler.java:184)
+	at com.connectfour.server.ClientHandler.handleMessage(ClientHandler.java:91)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:50)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-23 00:01:30.007 [pool-1-thread-1] INFO  c.connectfour.server.ClientHandler - Client disconnected: gu
+2025-04-23 00:01:30.007 [pool-1-thread-1] INFO  com.connectfour.server.GameServer - User unregistered: gu
+2025-04-23 00:01:30.007 [pool-1-thread-1] INFO  com.connectfour.server.GameSession - Player gu disconnected from game session
+2025-04-23 00:01:30.008 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: PLAY_AGAIN_RESPONSE
+2025-04-23 00:01:30.008 [pool-1-thread-1] INFO  c.connectfour.server.ClientHandler - Client disconnected: gu
+2025-04-23 00:01:30.008 [pool-1-thread-1] INFO  com.connectfour.server.GameServer - User unregistered: gu
+2025-04-23 00:01:30.009 [pool-1-thread-1] ERROR c.connectfour.server.ClientHandler - Error cleaning up client handler
+java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.ensureOpenAndConnected(NioSocketImpl.java:163)
+	at java.base/sun.nio.ch.NioSocketImpl.beginWrite(NioSocketImpl.java:362)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:407)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.flush(ObjectOutputStream.java:1845)
+	at java.base/java.io.ObjectOutputStream.flush(ObjectOutputStream.java:737)
+	at java.base/java.io.ObjectOutputStream.close(ObjectOutputStream.java:759)
+	at com.connectfour.server.ClientHandler.cleanup(ClientHandler.java:220)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:66)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-23 00:01:36.090 [pool-1-thread-2] INFO  c.connectfour.server.ClientHandler - Client hu requested disconnect: User closed application
+2025-04-23 00:01:36.091 [pool-1-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: DISCONNECT
+2025-04-23 00:01:36.091 [pool-1-thread-2] INFO  c.connectfour.server.ClientHandler - Client disconnected: hu
+2025-04-23 00:01:36.091 [pool-1-thread-2] INFO  com.connectfour.server.GameServer - User unregistered: hu

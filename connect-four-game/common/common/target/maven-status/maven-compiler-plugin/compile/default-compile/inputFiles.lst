@@ -1,0 +1,16 @@
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/GameStatus.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/PlayAgainResponseMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/GameStateUpdateMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/GameState.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/GameStartMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/Message.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/App.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/LoginResponseMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/DisconnectMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/MoveMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/ChatMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/PlayAgainRequestMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/MessageType.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/LoginRequestMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/PlayerColor.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/CellState.java

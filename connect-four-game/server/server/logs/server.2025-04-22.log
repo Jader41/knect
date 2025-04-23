@@ -1,0 +1,85 @@
+2025-04-22 19:51:32.474 [main] INFO  com.connectfour.server.ServerApp - Starting Connect Four server on port 8080
+2025-04-22 19:51:32.483 [main] INFO  com.connectfour.server.GameServer - Server started on port 8080
+2025-04-22 19:51:32.483 [Thread-0] INFO  c.c.server.MatchmakingQueue - Matchmaking queue started
+2025-04-22 19:51:44.150 [main] INFO  com.connectfour.server.GameServer - New client connected: /127.0.0.1
+2025-04-22 19:51:44.173 [pool-1-thread-1] INFO  com.connectfour.server.GameServer - User registered: gu
+2025-04-22 19:51:44.174 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to gu: LOGIN_RESPONSE
+2025-04-22 19:51:44.175 [pool-1-thread-1] INFO  c.connectfour.server.ClientHandler - User logged in: gu
+2025-04-22 19:51:44.175 [pool-1-thread-1] DEBUG c.c.server.MatchmakingQueue - Added client to matchmaking queue: gu
+2025-04-22 19:51:44.175 [pool-1-thread-1] INFO  com.connectfour.server.GameServer - User added to matchmaking queue: gu
+2025-04-22 19:51:46.248 [main] INFO  com.connectfour.server.GameServer - New client connected: /127.0.0.1
+2025-04-22 19:51:46.265 [pool-1-thread-2] INFO  com.connectfour.server.GameServer - User registered: hu
+2025-04-22 19:51:46.267 [pool-1-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: LOGIN_RESPONSE
+2025-04-22 19:51:46.267 [pool-1-thread-2] INFO  c.connectfour.server.ClientHandler - User logged in: hu
+2025-04-22 19:51:46.267 [pool-1-thread-2] DEBUG c.c.server.MatchmakingQueue - Added client to matchmaking queue: hu
+2025-04-22 19:51:46.267 [pool-1-thread-2] INFO  com.connectfour.server.GameServer - User added to matchmaking queue: hu
+2025-04-22 19:51:46.538 [Thread-0] INFO  com.connectfour.server.GameSession - Starting game session between gu and hu
+2025-04-22 19:51:46.569 [Thread-0] DEBUG c.connectfour.server.ClientHandler - Sent message to gu: GAME_START
+2025-04-22 19:51:46.570 [Thread-0] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: GAME_START
+2025-04-22 19:51:46.570 [Thread-0] INFO  c.c.server.MatchmakingQueue - Matched players: gu vs hu
+2025-04-22 19:52:00.491 [pool-1-thread-1] ERROR c.connectfour.server.ClientHandler - Error handling message: MOVE
+java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 6
+	at com.connectfour.common.model.GameState.checkForWin(GameState.java:134)
+	at com.connectfour.common.model.GameState.makeMove(GameState.java:82)
+	at com.connectfour.server.GameSession.handleMove(GameSession.java:61)
+	at com.connectfour.server.ClientHandler.handleMoveMessage(ClientHandler.java:139)
+	at com.connectfour.server.ClientHandler.handleMessage(ClientHandler.java:82)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:50)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-22 19:52:02.414 [pool-1-thread-1] ERROR c.connectfour.server.ClientHandler - Error handling message: MOVE
+java.lang.ArrayIndexOutOfBoundsException: Index 8 out of bounds for length 6
+	at com.connectfour.common.model.GameState.checkForWin(GameState.java:134)
+	at com.connectfour.common.model.GameState.makeMove(GameState.java:82)
+	at com.connectfour.server.GameSession.handleMove(GameSession.java:61)
+	at com.connectfour.server.ClientHandler.handleMoveMessage(ClientHandler.java:139)
+	at com.connectfour.server.ClientHandler.handleMessage(ClientHandler.java:82)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:50)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-22 19:52:04.106 [pool-1-thread-1] INFO  com.connectfour.server.GameSession - Player gu made a move in column 0
+2025-04-22 19:52:04.109 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to gu: GAME_STATE_UPDATE
+2025-04-22 19:52:04.110 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: GAME_STATE_UPDATE
+2025-04-22 19:52:04.757 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:05.968 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:06.419 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:06.916 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:07.389 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:07.919 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:08.553 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:13.627 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:14.252 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:14.767 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:15.247 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:16.052 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:16.588 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:17.119 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:17.664 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:18.491 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:19.045 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:19.519 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:20.104 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:21.236 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:22.346 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:22.921 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:23.404 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:23.880 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:24.616 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:25.377 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:26.095 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:26.726 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:27.312 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:28.054 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:28.677 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:29.387 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:29.962 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:30.411 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:31.088 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:31.559 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:36.261 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:36.864 [pool-1-thread-1] WARN  com.connectfour.server.GameSession - Player gu attempted to make a move out of turn
+2025-04-22 19:52:45.358 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to gu: CHAT_MESSAGE
+2025-04-22 19:52:45.359 [pool-1-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to hu: CHAT_MESSAGE
+2025-04-22 19:52:45.359 [pool-1-thread-1] INFO  com.connectfour.server.GameSession - Chat message from gu: heyy
