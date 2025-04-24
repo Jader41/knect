@@ -1,18 +1,21 @@
 package com.connectfour.common.model;
 
 import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Represents the state of a Connect Four game.
  */
 public class GameState implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L; // Updated version
     
     public static final int ROWS = 6;
     public static final int COLUMNS = 7;
     
     private final CellState[][] board;
-    private PlayerColor currentTurn;
+    private PlayerColor currentTurn; // Ensure not transient
     private GameStatus status;
     private final String player1Username;
     private final String player2Username;
@@ -30,11 +33,25 @@ public class GameState implements Serializable {
         this.player2Username = player2Username;
     }
     
+    // Add custom serialization methods to ensure proper serialization
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(currentTurn); // Explicitly write currentTurn
+        System.out.println("Serializing GameState, currentTurn=" + currentTurn);
+    }
+    
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        currentTurn = (PlayerColor) in.readObject(); // Explicitly read currentTurn
+        System.out.println("Deserializing GameState, currentTurn=" + currentTurn);
+    }
+    
     public CellState getCellState(int row, int col) {
         return board[row][col];
     }
     
     public PlayerColor getCurrentTurn() {
+        System.out.println("Getting current turn: " + currentTurn); // Debug
         return currentTurn;
     }
     
@@ -57,7 +74,10 @@ public class GameState implements Serializable {
      * @return true if the move was successful, false otherwise
      */
     public boolean makeMove(int column) {
+        System.out.println("makeMove called for column " + column + ", current turn: " + currentTurn);
+        
         if (status != GameStatus.IN_PROGRESS || column < 0 || column >= COLUMNS) {
+            System.out.println("Invalid move: game not in progress or column out of bounds");
             return false;
         }
         
@@ -72,20 +92,27 @@ public class GameState implements Serializable {
         
         if (row == -1) {
             // Column is full
+            System.out.println("Invalid move: column " + column + " is full");
             return false;
         }
         
         // Place the piece
-        board[row][column] = (currentTurn == PlayerColor.RED) ? CellState.RED : CellState.YELLOW;
+        CellState newPiece = (currentTurn == PlayerColor.RED) ? CellState.RED : CellState.YELLOW;
+        System.out.println("Placing " + newPiece + " piece at row " + row + ", column " + column);
+        board[row][column] = newPiece;
         
         // Check for win or draw
         if (checkForWin(row, column)) {
             status = (currentTurn == PlayerColor.RED) ? GameStatus.RED_WINS : GameStatus.YELLOW_WINS;
+            System.out.println("Win detected! Status set to: " + status);
         } else if (isBoardFull()) {
             status = GameStatus.DRAW;
+            System.out.println("Board is full. Status set to DRAW");
         } else {
             // Switch turns
+            PlayerColor oldTurn = currentTurn;
             currentTurn = (currentTurn == PlayerColor.RED) ? PlayerColor.YELLOW : PlayerColor.RED;
+            System.out.println("Turn switched from " + oldTurn + " to " + currentTurn);
         }
         
         return true;
@@ -102,13 +129,17 @@ public class GameState implements Serializable {
     
     private boolean checkForWin(int row, int col) {
         CellState playerPiece = board[row][col];
+        System.out.println("Checking for win at row=" + row + ", col=" + col + " for piece " + playerPiece);
         
         // Check horizontal
         int count = 0;
         for (int c = 0; c < COLUMNS; c++) {
             if (board[row][c] == playerPiece) {
                 count++;
-                if (count >= 4) return true;
+                if (count >= 4) {
+                    System.out.println("HORIZONTAL WIN found");
+                    return true;
+                }
             } else {
                 count = 0;
             }
@@ -119,7 +150,10 @@ public class GameState implements Serializable {
         for (int r = 0; r < ROWS; r++) {
             if (board[r][col] == playerPiece) {
                 count++;
-                if (count >= 4) return true;
+                if (count >= 4) {
+                    System.out.println("VERTICAL WIN found");
+                    return true;
+                }
             } else {
                 count = 0;
             }
@@ -127,13 +161,26 @@ public class GameState implements Serializable {
         
         // Check diagonal (positive slope)
         count = 0;
-        int startRow = row + Math.min(col, row);
-        int startCol = col - Math.min(col, row);
+        // Calculate starting positions for diagonal check
+        int startRow = row;
+        int startCol = col;
         
+        // Move to the bottom-left of the diagonal
+        while (startRow < ROWS - 1 && startCol > 0) {
+            startRow++;
+            startCol--;
+        }
+        
+        System.out.println("Positive diagonal starting at row=" + startRow + ", col=" + startCol);
+        
+        // Now check the diagonal going up-right
         for (int r = startRow, c = startCol; r >= 0 && c < COLUMNS; r--, c++) {
-            if (board[r][c] == playerPiece) {
+            if (r < ROWS && c >= 0 && c < COLUMNS && board[r][c] == playerPiece) {
                 count++;
-                if (count >= 4) return true;
+                if (count >= 4) {
+                    System.out.println("POSITIVE DIAGONAL WIN found");
+                    return true;
+                }
             } else {
                 count = 0;
             }
@@ -141,18 +188,32 @@ public class GameState implements Serializable {
         
         // Check diagonal (negative slope)
         count = 0;
-        startRow = row - Math.min(col, ROWS - 1 - row);
-        startCol = col - Math.min(col, ROWS - 1 - row);
+        // Calculate starting positions for anti-diagonal check
+        startRow = row;
+        startCol = col;
         
+        // Move to the top-left of the diagonal
+        while (startRow > 0 && startCol > 0) {
+            startRow--;
+            startCol--;
+        }
+        
+        System.out.println("Negative diagonal starting at row=" + startRow + ", col=" + startCol);
+        
+        // Now check the diagonal going down-right
         for (int r = startRow, c = startCol; r < ROWS && c < COLUMNS; r++, c++) {
-            if (board[r][c] == playerPiece) {
+            if (r >= 0 && c >= 0 && board[r][c] == playerPiece) {
                 count++;
-                if (count >= 4) return true;
+                if (count >= 4) {
+                    System.out.println("NEGATIVE DIAGONAL WIN found");
+                    return true;
+                }
             } else {
                 count = 0;
             }
         }
         
+        System.out.println("No win found");
         return false;
     }
     
@@ -171,6 +232,7 @@ public class GameState implements Serializable {
         }
         
         copy.currentTurn = this.currentTurn;
+        System.out.println("Copying GameState, currentTurn from " + this.currentTurn + " to " + copy.currentTurn);
         copy.status = this.status;
         
         return copy;

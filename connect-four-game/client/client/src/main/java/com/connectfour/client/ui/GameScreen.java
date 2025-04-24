@@ -217,8 +217,13 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         // Check if it's the player's turn
         boolean isPlayerTurn = (gameState.getCurrentTurn() == playerColor);
         
-        if (isPlayerTurn && gameState.getStatus() == GameStatus.IN_PROGRESS) {
-            gameClient.makeMove(column);
+        if (gameState.getStatus() == GameStatus.IN_PROGRESS) {
+            if (isPlayerTurn) {
+                System.out.println("Making move in column " + column + " for player " + gameClient.getUsername());
+                gameClient.makeMove(column);
+            } else {
+                System.out.println("Not your turn! Current turn: " + gameState.getCurrentTurn() + ", Your color: " + playerColor);
+            }
         }
     }
     
@@ -238,6 +243,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
      * Updates the game board to reflect the current game state.
      */
     private void updateBoard() {
+        System.out.println("Updating board UI from game state...");
         for (int row = 0; row < GameState.ROWS; row++) {
             for (int col = 0; col < GameState.COLUMNS; col++) {
                 CellState cellState = gameState.getCellState(row, col);
@@ -248,13 +254,17 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         break;
                     case RED:
                         boardCells[row][col].setFill(Color.RED);
+                        System.out.println("Setting cell [" + row + "," + col + "] to RED");
                         break;
                     case YELLOW:
                         boardCells[row][col].setFill(Color.YELLOW);
+                        System.out.println("Setting cell [" + row + "," + col + "] to YELLOW");
                         break;
                 }
             }
         }
+        // Force a layout refresh
+        boardGrid.requestLayout();
     }
     
     /**
@@ -400,6 +410,11 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     
     @Override
     public void onGameStateUpdated(GameState gameState) {
+        // Debug logging
+        System.out.println("Game state updated. Current turn: " + gameState.getCurrentTurn() + 
+                           ", Player color: " + playerColor + 
+                           ", Is my turn: " + (gameState.getCurrentTurn() == playerColor));
+        
         this.gameState = gameState;
         
         updateBoard();

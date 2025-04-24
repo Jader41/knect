@@ -218,6 +218,21 @@ public class GameClient {
      * @param message The game state update message
      */
     private void handleGameStateUpdate(GameStateUpdateMessage message) {
+        System.out.println("Received game state update from server:");
+        System.out.println("  Current turn: " + message.getGameState().getCurrentTurn());
+        System.out.println("  Board state:");
+        for (int row = 0; row < GameState.ROWS; row++) {
+            StringBuilder rowStr = new StringBuilder("    ");
+            for (int col = 0; col < GameState.COLUMNS; col++) {
+                switch(message.getGameState().getCellState(row, col)) {
+                    case EMPTY: rowStr.append("[ ]"); break;
+                    case RED: rowStr.append("[R]"); break;
+                    case YELLOW: rowStr.append("[Y]"); break;
+                }
+            }
+            System.out.println(rowStr.toString());
+        }
+        
         this.currentGameState = message.getGameState();
         notifyGameStateUpdated(currentGameState);
     }

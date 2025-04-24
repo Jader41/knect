@@ -52,6 +52,10 @@ public class GameSession {
         boolean isPlayer1Turn = gameState.getCurrentTurn() == PlayerColor.RED;
         boolean isPlayersTurn = (isPlayer1Turn && player == player1) || (!isPlayer1Turn && player == player2);
         
+        logger.info("Move attempted by {} in column {}. Current turn: {}, Player1(RED): {}, Player2(YELLOW): {}, isPlayersTurn: {}",
+                player.getUsername(), column, gameState.getCurrentTurn(), 
+                player1.getUsername(), player2.getUsername(), isPlayersTurn);
+        
         if (!isPlayersTurn) {
             logger.warn("Player {} attempted to make a move out of turn", player.getUsername());
             return;
@@ -61,7 +65,22 @@ public class GameSession {
         boolean moveSuccess = gameState.makeMove(column);
         
         if (moveSuccess) {
-            logger.info("Player {} made a move in column {}", player.getUsername(), column);
+            logger.info("Player {} made successful move in column {}. New turn: {}", 
+                    player.getUsername(), column, gameState.getCurrentTurn());
+            
+            // Log the current board state
+            logger.debug("Current board state after move:");
+            for (int row = 0; row < GameState.ROWS; row++) {
+                StringBuilder rowStr = new StringBuilder();
+                for (int col = 0; col < GameState.COLUMNS; col++) {
+                    switch(gameState.getCellState(row, col)) {
+                        case EMPTY: rowStr.append("[ ]"); break;
+                        case RED: rowStr.append("[R]"); break;
+                        case YELLOW: rowStr.append("[Y]"); break;
+                    }
+                }
+                logger.debug(rowStr.toString());
+            }
             
             // Send updated game state to both players
             broadcastGameState();
@@ -74,7 +93,11 @@ public class GameSession {
      * Broadcasts the current game state to both players.
      */
     private void broadcastGameState() {
-        GameStateUpdateMessage message = new GameStateUpdateMessage(gameState);
+        // Create a copy of the game state to ensure immutability
+        GameState stateCopy = gameState.copy();
+        logger.info("Broadcasting game state with current turn: " + stateCopy.getCurrentTurn());
+        
+        GameStateUpdateMessage message = new GameStateUpdateMessage(stateCopy);
         player1.sendMessage(message);
         player2.sendMessage(message);
     }
