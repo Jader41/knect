@@ -47,6 +47,13 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     private boolean isAIGame;
     private boolean isAITurn;
     
+    private final Color RED_PIECE_COLOR = Color.BLACK; // Black for RED pieces
+    private final Color YELLOW_PIECE_COLOR = Color.rgb(65, 105, 225); // Blue for YELLOW pieces
+
+    private Button playAgainButton;
+    private Button returnToLobbyButton;
+    private HBox gameOverButtonsBox;
+    
     public GameScreen(Stage stage, GameClient gameClient) {
         this.stage = stage;
         this.gameClient = gameClient;
@@ -179,7 +186,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         playerLabel.setStyle("-fx-font-weight: bold;");
         
         Circle playerCircle = new Circle(15);
-        playerCircle.setFill(Color.BLACK);
+        playerCircle.setFill(playerColor == PlayerColor.RED ? RED_PIECE_COLOR : YELLOW_PIECE_COLOR);
         playerCircle.setStroke(Color.BLACK);
         playerCircle.setStrokeWidth(1);
         
@@ -192,7 +199,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         opponentLabel.setStyle("-fx-font-weight: bold;");
         
         Circle opponentCircle = new Circle(15);
-        opponentCircle.setFill(Color.rgb(65, 105, 225));
+        opponentCircle.setFill(playerColor == PlayerColor.RED ? YELLOW_PIECE_COLOR : RED_PIECE_COLOR);
         opponentCircle.setStroke(Color.BLACK);
         opponentCircle.setStrokeWidth(1);
         
@@ -218,16 +225,24 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         turnInfoBox.getChildren().add(turnLabel);
         turnInfoBox.setPadding(new Insets(10, 0, 10, 0));
         
-        // New Game button - will be shown/hidden based on game state
-        Button newGameButton = new Button("New Game");
-        newGameButton.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC;");
-        newGameButton.setOnAction(e -> gameClient.requestPlayAgain(true));
-        newGameButton.setVisible(false); // Initially hidden during gameplay
-        newGameButton.setManaged(false); // Don't take up space when hidden
+        // Create game over buttons
+        playAgainButton = new Button("Play Again");
+        playAgainButton.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC;");
+        playAgainButton.setOnAction(e -> requestPlayAgain(true));
+        
+        returnToLobbyButton = new Button("Return to Lobby");
+        returnToLobbyButton.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC;");
+        returnToLobbyButton.setOnAction(e -> returnToLobby());
+        
+        gameOverButtonsBox = new HBox(10);
+        gameOverButtonsBox.setAlignment(Pos.CENTER);
+        gameOverButtonsBox.getChildren().addAll(playAgainButton, returnToLobbyButton);
+        gameOverButtonsBox.setVisible(false); // Initially hidden
+        gameOverButtonsBox.setManaged(false); // Don't take up space when hidden
         
         VBox centerContent = new VBox(10);
         centerContent.setAlignment(Pos.CENTER);
-        centerContent.getChildren().addAll(playerStatusBox, turnInfoBox, newGameButton);
+        centerContent.getChildren().addAll(playerStatusBox, turnInfoBox, gameOverButtonsBox);
         
         infoPanel.getChildren().add(centerContent);
         
@@ -358,11 +373,11 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         boardCells[row][col].setFill(Color.WHITE);
                         break;
                     case RED:
-                        boardCells[row][col].setFill(Color.BLACK);
+                        boardCells[row][col].setFill(RED_PIECE_COLOR);
                         System.out.println("Setting cell [" + row + "," + col + "] to RED");
                         break;
                     case YELLOW:
-                        boardCells[row][col].setFill(Color.rgb(65, 105, 225));
+                        boardCells[row][col].setFill(YELLOW_PIECE_COLOR);
                         System.out.println("Setting cell [" + row + "," + col + "] to YELLOW");
                         break;
                 }
@@ -390,18 +405,38 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         } else {
             switch (gameState.getStatus()) {
                 case RED_WINS:
-                    if (playerColor == PlayerColor.RED || (isAIGame && playerColor != PlayerColor.RED)) {
-                        turnLabel.setText("You win!");
+                    if (isAIGame) {
+                        // For AI games, show who actually won
+                        if (playerColor == PlayerColor.RED) {
+                            turnLabel.setText("You win!");
+                        } else {
+                            turnLabel.setText("Computer wins!");
+                        }
                     } else {
-                        turnLabel.setText(isAIGame ? "Computer wins!" : "Opponent wins!");
+                        // For online games
+                        if (playerColor == PlayerColor.RED) {
+                            turnLabel.setText("You win!");
+                        } else {
+                            turnLabel.setText("Opponent wins!");
+                        }
                     }
                     statusLabel.setText("Game Over");
                     break;
                 case YELLOW_WINS:
-                    if (playerColor == PlayerColor.YELLOW || (isAIGame && playerColor != PlayerColor.YELLOW)) {
-                        turnLabel.setText("You win!");
+                    if (isAIGame) {
+                        // For AI games, show who actually won
+                        if (playerColor == PlayerColor.YELLOW) {
+                            turnLabel.setText("You win!");
+                        } else {
+                            turnLabel.setText("Computer wins!");
+                        }
                     } else {
-                        turnLabel.setText(isAIGame ? "Computer wins!" : "Opponent wins!");
+                        // For online games
+                        if (playerColor == PlayerColor.YELLOW) {
+                            turnLabel.setText("You win!");
+                        } else {
+                            turnLabel.setText("Opponent wins!");
+                        }
                     }
                     statusLabel.setText("Game Over");
                     break;
@@ -422,8 +457,10 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
      * Shows the play again buttons.
      */
     private void showPlayAgainButtons() {
-        // For AI games, we'll just enable the "Return to Lobby" button
-        // For online games, we'll implement this in the handlers
+        if (gameOverButtonsBox != null) {
+            gameOverButtonsBox.setVisible(true);
+            gameOverButtonsBox.setManaged(true);
+        }
     }
     
     /**
