@@ -9,6 +9,7 @@ import com.connectfour.common.model.PlayerColor;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -59,13 +60,15 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     public void show() {
         // Create the root layout
         rootLayout = new BorderPane();
+        rootLayout.setStyle("-fx-background-color: white;");
+        rootLayout.setPadding(new Insets(0, 30, 0, 30)); // Add left and right margin
         
         // Create the game board
         createGameBoard();
         
         // Create the info panel
         VBox infoPanel = createInfoPanel();
-        rootLayout.setRight(infoPanel);
+        rootLayout.setTop(infoPanel);
         
         // Create the chat panel
         VBox chatPanel = createChatPanel();
@@ -76,6 +79,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         
         // Set the scene to the stage
         stage.setScene(scene);
+        stage.setTitle("Connect Four");
         
         // Update the board with the current game state
         updateBoard();
@@ -91,7 +95,12 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         boardGrid.setPadding(new Insets(10));
         boardGrid.setHgap(5);
         boardGrid.setVgap(5);
-        boardGrid.setStyle("-fx-background-color: blue;");
+        boardGrid.setStyle("-fx-background-color: #CCCCCC;");
+        
+        // Wrap the board in a container with padding
+        BorderPane boardContainer = new BorderPane();
+        boardContainer.setCenter(boardGrid);
+        boardContainer.setPadding(new Insets(0, 20, 0, 20)); // Add left and right padding
         
         boardCells = new Circle[GameState.ROWS][GameState.COLUMNS];
         
@@ -102,7 +111,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                 
                 Circle circle = new Circle(30);
                 circle.setFill(Color.WHITE);
-                circle.setStroke(Color.BLACK);
+                circle.setStroke(Color.LIGHTGRAY);
                 circle.setStrokeWidth(1);
                 
                 boardCells[row][col] = circle;
@@ -116,7 +125,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
             }
         }
         
-        rootLayout.setCenter(boardGrid);
+        rootLayout.setCenter(boardContainer);
     }
     
     /**
@@ -129,14 +138,14 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         infoPanel.setPadding(new Insets(10));
         infoPanel.setAlignment(Pos.TOP_CENTER);
         infoPanel.setMinWidth(200);
-        infoPanel.setStyle("-fx-background-color: #f0f0f0;");
+        infoPanel.setStyle("-fx-background-color: white;");
         
         // Player info
-        Label playerLabel = new Label("You: " + gameClient.getUsername());
+        Label playerLabel = new Label(gameClient.getUsername());
         playerLabel.setStyle("-fx-font-weight: bold;");
         
         Circle playerCircle = new Circle(15);
-        playerCircle.setFill(playerColor == PlayerColor.RED ? Color.RED : Color.YELLOW);
+        playerCircle.setFill(Color.BLACK);
         playerCircle.setStroke(Color.BLACK);
         playerCircle.setStrokeWidth(1);
         
@@ -145,11 +154,11 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         playerInfo.getChildren().addAll(playerCircle, playerLabel);
         
         // Opponent info
-        Label opponentLabel = new Label("Opponent: " + opponentUsername);
+        Label opponentLabel = new Label(opponentUsername);
         opponentLabel.setStyle("-fx-font-weight: bold;");
         
         Circle opponentCircle = new Circle(15);
-        opponentCircle.setFill(playerColor == PlayerColor.RED ? Color.YELLOW : Color.RED);
+        opponentCircle.setFill(Color.rgb(65, 105, 225));
         opponentCircle.setStroke(Color.BLACK);
         opponentCircle.setStrokeWidth(1);
         
@@ -164,10 +173,29 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         statusLabel = new Label();
         statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
         
-        Separator separator = new Separator();
-        separator.setPadding(new Insets(10, 0, 10, 0));
+        // Center the player info and status info
+        HBox playerStatusBox = new HBox(30);
+        playerStatusBox.setAlignment(Pos.CENTER);
+        playerStatusBox.getChildren().addAll(playerInfo, statusLabel, opponentInfo);
         
-        infoPanel.getChildren().addAll(playerInfo, opponentInfo, separator, turnLabel, statusLabel);
+        // Turn info container - moved from above to be more visible
+        HBox turnInfoBox = new HBox();
+        turnInfoBox.setAlignment(Pos.CENTER);
+        turnInfoBox.getChildren().add(turnLabel);
+        turnInfoBox.setPadding(new Insets(10, 0, 10, 0));
+        
+        // New Game button - will be shown/hidden based on game state
+        Button newGameButton = new Button("New Game");
+        newGameButton.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC;");
+        newGameButton.setOnAction(e -> gameClient.requestPlayAgain(true));
+        newGameButton.setVisible(false); // Initially hidden during gameplay
+        newGameButton.setManaged(false); // Don't take up space when hidden
+        
+        VBox centerContent = new VBox(10);
+        centerContent.setAlignment(Pos.CENTER);
+        centerContent.getChildren().addAll(playerStatusBox, turnInfoBox, newGameButton);
+        
+        infoPanel.getChildren().add(centerContent);
         
         return infoPanel;
     }
@@ -180,7 +208,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     private VBox createChatPanel() {
         VBox chatPanel = new VBox(5);
         chatPanel.setPadding(new Insets(10));
-        chatPanel.setStyle("-fx-background-color: #f0f0f0;");
+        chatPanel.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 1 0 0 0;");
         
         Label chatLabel = new Label("Chat");
         chatLabel.setStyle("-fx-font-weight: bold;");
@@ -198,6 +226,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         chatInput.setOnAction(e -> sendChatMessage());
         
         Button sendButton = new Button("Send");
+        sendButton.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC;");
         sendButton.setOnAction(e -> sendChatMessage());
         
         HBox inputBox = new HBox(5, chatInput, sendButton);
@@ -253,11 +282,11 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         boardCells[row][col].setFill(Color.WHITE);
                         break;
                     case RED:
-                        boardCells[row][col].setFill(Color.RED);
+                        boardCells[row][col].setFill(Color.BLACK);
                         System.out.println("Setting cell [" + row + "," + col + "] to RED");
                         break;
                     case YELLOW:
-                        boardCells[row][col].setFill(Color.YELLOW);
+                        boardCells[row][col].setFill(Color.rgb(65, 105, 225));
                         System.out.println("Setting cell [" + row + "," + col + "] to YELLOW");
                         break;
                 }
@@ -274,11 +303,42 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         // Update turn label
         boolean isPlayerTurn = (gameState.getCurrentTurn() == playerColor);
         
+        // Find the New Game button
+        Button newGameButton = null;
+        VBox infoPanel = (VBox) rootLayout.getTop();
+        if (infoPanel != null && !infoPanel.getChildren().isEmpty()) {
+            VBox centerContent = (VBox) infoPanel.getChildren().get(0);
+            if (centerContent != null && centerContent.getChildren().size() > 2) {
+                Node node = centerContent.getChildren().get(2);
+                if (node instanceof Button) {
+                    newGameButton = (Button) node;
+                }
+            }
+        }
+        
         if (gameState.getStatus() == GameStatus.IN_PROGRESS) {
-            turnLabel.setText(isPlayerTurn ? "Your turn" : "Opponent's turn");
-            turnLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: " + (isPlayerTurn ? "green" : "black") + ";");
+            // Hide New Game button during gameplay
+            if (newGameButton != null) {
+                newGameButton.setVisible(false);
+                newGameButton.setManaged(false);
+            }
+            
+            if (isPlayerTurn) {
+                turnLabel.setText("Your turn");
+            } else {
+                turnLabel.setText(opponentUsername + "'s turn");
+            }
+            turnLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: " + 
+                              (isPlayerTurn ? "#000000" : "#4169E1") + ";");
         } else {
+            // Show New Game button when game is over
+            if (newGameButton != null) {
+                newGameButton.setVisible(true);
+                newGameButton.setManaged(true);
+            }
+            
             turnLabel.setText("Game over");
+            turnLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         }
         
         // Update status label
@@ -288,19 +348,19 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                 break;
             case RED_WINS:
                 boolean playerWon = (playerColor == PlayerColor.RED);
-                statusLabel.setText(playerWon ? "You won!" : "Opponent won!");
-                statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: " + (playerWon ? "green" : "red") + ";");
+                statusLabel.setText(playerWon ? gameClient.getUsername() + " won!" : opponentUsername + " won!");
+                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
                 showGameOverDialog(playerWon);
                 break;
             case YELLOW_WINS:
                 playerWon = (playerColor == PlayerColor.YELLOW);
-                statusLabel.setText(playerWon ? "You won!" : "Opponent won!");
-                statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: " + (playerWon ? "green" : "red") + ";");
+                statusLabel.setText(playerWon ? gameClient.getUsername() + " won!" : opponentUsername + " won!");
+                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
                 showGameOverDialog(playerWon);
                 break;
             case DRAW:
-                statusLabel.setText("Game ended in a draw!");
-                statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: blue;");
+                statusLabel.setText("Draw!");
+                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
                 showGameOverDialog(false);
                 break;
         }
@@ -321,8 +381,15 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         content.setPadding(new Insets(10));
         content.setAlignment(Pos.CENTER);
         
-        Label resultLabel = new Label(playerWon ? "You won!" : 
-                                      (gameState.getStatus() == GameStatus.DRAW ? "It's a draw!" : "You lost!"));
+        String resultText;
+        if (gameState.getStatus() == GameStatus.DRAW) {
+            resultText = "It's a draw!";
+        } else {
+            String winnerName = playerWon ? gameClient.getUsername() : opponentUsername;
+            resultText = winnerName + " won!";
+        }
+        
+        Label resultLabel = new Label(resultText);
         resultLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         
         Label questionLabel = new Label("Would you like to play again?");
@@ -332,7 +399,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         dialog.getDialogPane().setContent(content);
         
         // Add buttons
-        ButtonType playAgainButton = new ButtonType("Play Again", ButtonBar.ButtonData.YES);
+        ButtonType playAgainButton = new ButtonType("New Game", ButtonBar.ButtonData.YES);
         ButtonType quitButton = new ButtonType("Quit", ButtonBar.ButtonData.NO);
         
         dialog.getDialogPane().getButtonTypes().addAll(playAgainButton, quitButton);
