@@ -10,7 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,9 +43,9 @@ public class GameClient {
         this.port = port;
         this.executor = Executors.newSingleThreadExecutor();
         this.connected = false;
-        this.connectionListeners = new ArrayList<>();
-        this.gameStateListeners = new ArrayList<>();
-        this.chatMessageListeners = new ArrayList<>();
+        this.connectionListeners = new CopyOnWriteArrayList<>();
+        this.gameStateListeners = new CopyOnWriteArrayList<>();
+        this.chatMessageListeners = new CopyOnWriteArrayList<>();
     }
     
     /**
@@ -108,24 +110,31 @@ public class GameClient {
      * Cleans up resources.
      */
     private void cleanup() {
+        // Set connected to false first to prevent recursive cleanup calls
+        boolean wasConnected = connected;
         connected = false;
         
         try {
             if (inputStream != null) {
                 inputStream.close();
+                inputStream = null;
             }
             if (outputStream != null) {
                 outputStream.close();
+                outputStream = null;
             }
             if (socket != null && !socket.isClosed()) {
                 socket.close();
+                socket = null;
             }
         } catch (IOException e) {
             System.err.println("Error cleaning up resources: " + e.getMessage());
         }
         
-        // Notify listeners
-        notifyDisconnected("Connection closed");
+        // Only notify if we were connected before
+        if (wasConnected) {
+            notifyDisconnected("Connection closed");
+        }
     }
     
     /**
@@ -402,8 +411,13 @@ public class GameClient {
      */
     private void notifyConnectionEstablished() {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ConnectionListener listener : connectionListeners) {
-                listener.onConnectionEstablished();
+                try {
+                    listener.onConnectionEstablished();
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -415,8 +429,13 @@ public class GameClient {
      */
     private void notifyConnectionFailed(String reason) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ConnectionListener listener : connectionListeners) {
-                listener.onConnectionFailed(reason);
+                try {
+                    listener.onConnectionFailed(reason);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -428,8 +447,13 @@ public class GameClient {
      */
     private void notifyDisconnected(String reason) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ConnectionListener listener : connectionListeners) {
-                listener.onDisconnected(reason);
+                try {
+                    listener.onDisconnected(reason);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -439,8 +463,13 @@ public class GameClient {
      */
     private void notifyLoginSuccessful() {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ConnectionListener listener : connectionListeners) {
-                listener.onLoginSuccessful();
+                try {
+                    listener.onLoginSuccessful();
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -452,8 +481,13 @@ public class GameClient {
      */
     private void notifyLoginFailed(String reason) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ConnectionListener listener : connectionListeners) {
-                listener.onLoginFailed(reason);
+                try {
+                    listener.onLoginFailed(reason);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -467,8 +501,13 @@ public class GameClient {
      */
     private void notifyGameStarted(GameState gameState, PlayerColor assignedColor, String opponentUsername) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (GameStateListener listener : gameStateListeners) {
-                listener.onGameStarted(gameState, assignedColor, opponentUsername);
+                try {
+                    listener.onGameStarted(gameState, assignedColor, opponentUsername);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -480,8 +519,13 @@ public class GameClient {
      */
     private void notifyGameStateUpdated(GameState gameState) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (GameStateListener listener : gameStateListeners) {
-                listener.onGameStateUpdated(gameState);
+                try {
+                    listener.onGameStateUpdated(gameState);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -491,8 +535,13 @@ public class GameClient {
      */
     private void notifyOpponentDisconnected() {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (GameStateListener listener : gameStateListeners) {
-                listener.onOpponentDisconnected();
+                try {
+                    listener.onOpponentDisconnected();
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -502,8 +551,13 @@ public class GameClient {
      */
     private void notifyOpponentDeclinedRematch() {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (GameStateListener listener : gameStateListeners) {
-                listener.onOpponentDeclinedRematch();
+                try {
+                    listener.onOpponentDeclinedRematch();
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -515,8 +569,13 @@ public class GameClient {
      */
     private void notifyChatMessageReceived(ChatMessage message) {
         Platform.runLater(() -> {
+            // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
             for (ChatMessageListener listener : chatMessageListeners) {
-                listener.onChatMessageReceived(message);
+                try {
+                    listener.onChatMessageReceived(message);
+                } catch (Exception e) {
+                    System.err.println("Error notifying listener: " + e.getMessage());
+                }
             }
         });
     }
@@ -549,20 +608,33 @@ public class GameClient {
     }
     
     /**
-     * Gets the username of the player.
+     * Returns the user's username.
      * 
-     * @return The player's username
+     * @return The username
      */
     public String getUsername() {
         return username;
     }
     
     /**
-     * Checks if the client is connected to the server.
+     * Returns whether the client is connected to the server.
      * 
-     * @return true if the client is connected, false otherwise
+     * @return true if connected, false otherwise
      */
     public boolean isConnected() {
         return connected;
+    }
+    
+    /**
+     * Cancels matchmaking with the server.
+     */
+    public void cancelMatchmaking() {
+        if (connected) {
+            try {
+                sendMessage(new CancelMatchmakingMessage());
+            } catch (Exception e) {
+                System.err.println("Error sending cancel matchmaking message: " + e.getMessage());
+            }
+        }
     }
 } 

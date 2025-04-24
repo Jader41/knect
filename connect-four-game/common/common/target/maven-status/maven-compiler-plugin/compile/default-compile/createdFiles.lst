@@ -14,3 +14,4 @@ com/connectfour/common/messages/Message.class
 com/connectfour/common/messages/LoginResponseMessage.class
 com/connectfour/common/messages/MoveMessage.class
 com/connectfour/common/messages/DisconnectMessage.class
+com/connectfour/common/messages/CancelMatchmakingMessage.class

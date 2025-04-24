@@ -14,5 +14,6 @@ public enum MessageType implements Serializable {
     CHAT_MESSAGE,
     PLAY_AGAIN_REQUEST,
     PLAY_AGAIN_RESPONSE,
-    DISCONNECT
+    DISCONNECT,
+    CANCEL_MATCHMAKING
 } 

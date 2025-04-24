@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable {
     
     private String username;
     private boolean connected;
+    private boolean authenticated;
     private GameSession currentGame;
     private boolean inMatchmaking;
     
@@ -30,6 +31,7 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
         this.server = server;
         this.connected = true;
+        this.authenticated = false;
         this.inMatchmaking = false;
     }
     
@@ -68,33 +70,38 @@ public class ClientHandler implements Runnable {
     }
     
     /**
-     * Handles an incoming message from the client.
+     * Handles a message from the client.
      * 
      * @param message The message to handle
      */
     private void handleMessage(Message message) {
-        try {
-            switch (message.getType()) {
-                case LOGIN_REQUEST:
-                    handleLoginRequest((LoginRequestMessage) message);
-                    break;
-                case MOVE:
-                    handleMoveMessage((MoveMessage) message);
-                    break;
-                case CHAT_MESSAGE:
-                    handleChatMessage((ChatMessage) message);
-                    break;
-                case PLAY_AGAIN_REQUEST:
-                    handlePlayAgainRequest((PlayAgainRequestMessage) message);
-                    break;
-                case DISCONNECT:
-                    handleDisconnectMessage((DisconnectMessage) message);
-                    break;
-                default:
-                    logger.warn("Unhandled message type: {}", message.getType());
-            }
-        } catch (Exception e) {
-            logger.error("Error handling message: {}", message.getType(), e);
+        if (!authenticated && !(message instanceof LoginRequestMessage)) {
+            // Client must authenticate first
+            sendMessage(new DisconnectMessage("You must login first"));
+            return;
+        }
+        
+        switch (message.getType()) {
+            case LOGIN_REQUEST:
+                handleLoginRequest((LoginRequestMessage) message);
+                break;
+            case MOVE:
+                handleMove((MoveMessage) message);
+                break;
+            case CHAT_MESSAGE:
+                handleChatMessage((ChatMessage) message);
+                break;
+            case PLAY_AGAIN_REQUEST:
+                handlePlayAgainRequest((PlayAgainRequestMessage) message);
+                break;
+            case DISCONNECT:
+                handleDisconnect((DisconnectMessage) message);
+                break;
+            case CANCEL_MATCHMAKING:
+                handleCancelMatchmaking();
+                break;
+            default:
+                logger.warn("Unknown message type received from client: {}", message.getType());
         }
     }
     
@@ -117,6 +124,7 @@ public class ClientHandler implements Runnable {
         
         if (success) {
             this.username = requestedUsername;
+            this.authenticated = true;
             sendMessage(new LoginResponseMessage(true, null));
             logger.info("User logged in: {}", username);
             
@@ -134,7 +142,7 @@ public class ClientHandler implements Runnable {
      * 
      * @param message The move message
      */
-    private void handleMoveMessage(MoveMessage message) {
+    private void handleMove(MoveMessage message) {
         if (currentGame != null) {
             currentGame.handleMove(this, message.getColumn());
         } else {
@@ -179,7 +187,7 @@ public class ClientHandler implements Runnable {
      * 
      * @param message The disconnect message
      */
-    private void handleDisconnectMessage(DisconnectMessage message) {
+    private void handleDisconnect(DisconnectMessage message) {
         logger.info("Client {} requested disconnect: {}", username, message.getReason());
         disconnect(message.getReason());
     }
@@ -292,5 +300,14 @@ public class ClientHandler implements Runnable {
      */
     public void clearCurrentGame() {
         this.currentGame = null;
+    }
+    
+    /**
+     * Handles a cancel matchmaking message.
+     */
+    private void handleCancelMatchmaking() {
+        // Remove the client from the matchmaking queue
+        server.removeFromMatchmaking(this);
+        logger.info("Client {} canceled matchmaking", username);
     }
 } 

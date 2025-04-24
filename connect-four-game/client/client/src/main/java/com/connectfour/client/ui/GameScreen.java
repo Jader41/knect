@@ -1,11 +1,13 @@
 package com.connectfour.client.ui;
 
 import com.connectfour.client.GameClient;
+import com.connectfour.client.ai.AIPlayer;
 import com.connectfour.common.messages.ChatMessage;
 import com.connectfour.common.model.CellState;
 import com.connectfour.common.model.GameState;
 import com.connectfour.common.model.GameStatus;
 import com.connectfour.common.model.PlayerColor;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -39,9 +41,16 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     private PlayerColor playerColor;
     private String opponentUsername;
     
+    // AI player
+    private AIPlayer aiPlayer;
+    private String aiDifficulty;
+    private boolean isAIGame;
+    private boolean isAITurn;
+    
     public GameScreen(Stage stage, GameClient gameClient) {
         this.stage = stage;
         this.gameClient = gameClient;
+        this.isAIGame = false;
         
         // Register listeners
         gameClient.addGameStateListener(this);
@@ -52,6 +61,26 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.gameState = gameClient.getCurrentGameState();
         this.playerColor = gameClient.getAssignedColor();
         this.opponentUsername = gameClient.getOpponentUsername();
+    }
+    
+    /**
+     * Constructor for AI game.
+     */
+    public GameScreen(Stage stage, GameClient gameClient, GameState gameState, PlayerColor playerColor, String aiDifficulty) {
+        this.stage = stage;
+        this.gameClient = gameClient;
+        this.gameState = gameState;
+        this.playerColor = playerColor;
+        this.opponentUsername = "Computer (" + aiDifficulty + ")";
+        this.isAIGame = true;
+        this.aiDifficulty = aiDifficulty;
+        
+        // Create AI player
+        PlayerColor aiColor = (playerColor == PlayerColor.RED) ? PlayerColor.YELLOW : PlayerColor.RED;
+        this.aiPlayer = new AIPlayer(aiDifficulty, aiColor);
+        
+        // Determine if AI goes first (if AI is RED)
+        this.isAITurn = (aiColor == PlayerColor.RED);
     }
     
     /**
@@ -84,6 +113,11 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         // Update the board with the current game state
         updateBoard();
         updateGameStatus();
+        
+        // If it's an AI game and AI goes first, make AI move
+        if (isAIGame && isAITurn) {
+            makeAIMove();
+        }
     }
     
     /**
@@ -244,14 +278,56 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
      */
     private void makeMove(int column) {
         // Check if it's the player's turn
-        boolean isPlayerTurn = (gameState.getCurrentTurn() == playerColor);
+        boolean isPlayerTurn = (!isAIGame && gameState.getCurrentTurn() == playerColor) || 
+                               (isAIGame && !isAITurn);
         
-        if (gameState.getStatus() == GameStatus.IN_PROGRESS) {
-            if (isPlayerTurn) {
-                System.out.println("Making move in column " + column + " for player " + gameClient.getUsername());
-                gameClient.makeMove(column);
+        if (gameState.getStatus() != GameStatus.IN_PROGRESS || !isPlayerTurn) {
+            return;
+        }
+        
+        if (isAIGame) {
+            // Make move locally
+            boolean moveSuccess = gameState.makeMove(column);
+            if (moveSuccess) {
+                updateBoard();
+                updateGameStatus();
+                
+                // If game is still in progress, let AI make its move
+                if (gameState.getStatus() == GameStatus.IN_PROGRESS) {
+                    isAITurn = true;
+                    // Add a small delay before AI moves
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(500);
+                            Platform.runLater(this::makeAIMove);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }).start();
+                }
+            }
+        } else {
+            // Send move to server for online game
+            gameClient.makeMove(column);
+        }
+    }
+    
+    /**
+     * Makes a move for the AI player.
+     */
+    private void makeAIMove() {
+        if (gameState.getStatus() == GameStatus.IN_PROGRESS && isAITurn) {
+            int column = aiPlayer.getBestMove(gameState);
+            boolean moveSuccess = gameState.makeMove(column);
+            
+            if (moveSuccess) {
+                updateBoard();
+                updateGameStatus();
+                isAITurn = false;
             } else {
-                System.out.println("Not your turn! Current turn: " + gameState.getCurrentTurn() + ", Your color: " + playerColor);
+                // If AI couldn't make a valid move (shouldn't happen with proper implementation),
+                // try another column
+                makeAIMove();
             }
         }
     }
@@ -300,166 +376,97 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
      * Updates the game status and turn information.
      */
     private void updateGameStatus() {
-        // Update turn label
-        boolean isPlayerTurn = (gameState.getCurrentTurn() == playerColor);
-        
-        // Find the New Game button
-        Button newGameButton = null;
-        VBox infoPanel = (VBox) rootLayout.getTop();
-        if (infoPanel != null && !infoPanel.getChildren().isEmpty()) {
-            VBox centerContent = (VBox) infoPanel.getChildren().get(0);
-            if (centerContent != null && centerContent.getChildren().size() > 2) {
-                Node node = centerContent.getChildren().get(2);
-                if (node instanceof Button) {
-                    newGameButton = (Button) node;
-                }
-            }
-        }
+        boolean isPlayerTurn = (!isAIGame && gameState.getCurrentTurn() == playerColor) || 
+                               (isAIGame && !isAITurn);
         
         if (gameState.getStatus() == GameStatus.IN_PROGRESS) {
-            // Hide New Game button during gameplay
-            if (newGameButton != null) {
-                newGameButton.setVisible(false);
-                newGameButton.setManaged(false);
-            }
-            
             if (isPlayerTurn) {
                 turnLabel.setText("Your turn");
+                statusLabel.setText("Click on a column to place your piece");
             } else {
-                turnLabel.setText(opponentUsername + "'s turn");
+                turnLabel.setText(isAIGame ? "Computer's turn" : "Opponent's turn");
+                statusLabel.setText("Waiting for " + (isAIGame ? "computer" : "opponent") + " to make a move");
             }
-            turnLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: " + 
-                              (isPlayerTurn ? "#000000" : "#4169E1") + ";");
         } else {
-            // Show New Game button when game is over
-            if (newGameButton != null) {
-                newGameButton.setVisible(true);
-                newGameButton.setManaged(true);
+            switch (gameState.getStatus()) {
+                case RED_WINS:
+                    if (playerColor == PlayerColor.RED || (isAIGame && playerColor != PlayerColor.RED)) {
+                        turnLabel.setText("You win!");
+                    } else {
+                        turnLabel.setText(isAIGame ? "Computer wins!" : "Opponent wins!");
+                    }
+                    statusLabel.setText("Game Over");
+                    break;
+                case YELLOW_WINS:
+                    if (playerColor == PlayerColor.YELLOW || (isAIGame && playerColor != PlayerColor.YELLOW)) {
+                        turnLabel.setText("You win!");
+                    } else {
+                        turnLabel.setText(isAIGame ? "Computer wins!" : "Opponent wins!");
+                    }
+                    statusLabel.setText("Game Over");
+                    break;
+                case DRAW:
+                    turnLabel.setText("Game ended in a draw");
+                    statusLabel.setText("Game Over");
+                    break;
+                default:
+                    break;
             }
             
-            turnLabel.setText("Game over");
-            turnLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-        }
-        
-        // Update status label
-        switch (gameState.getStatus()) {
-            case IN_PROGRESS:
-                statusLabel.setText("");
-                break;
-            case RED_WINS:
-                boolean playerWon = (playerColor == PlayerColor.RED);
-                statusLabel.setText(playerWon ? gameClient.getUsername() + " won!" : opponentUsername + " won!");
-                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-                showGameOverDialog(playerWon);
-                break;
-            case YELLOW_WINS:
-                playerWon = (playerColor == PlayerColor.YELLOW);
-                statusLabel.setText(playerWon ? gameClient.getUsername() + " won!" : opponentUsername + " won!");
-                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-                showGameOverDialog(playerWon);
-                break;
-            case DRAW:
-                statusLabel.setText("Draw!");
-                statusLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-                showGameOverDialog(false);
-                break;
+            // Show play again buttons
+            showPlayAgainButtons();
         }
     }
     
     /**
-     * Shows a dialog when the game is over, asking if the player wants to play again.
+     * Shows the play again buttons.
+     */
+    private void showPlayAgainButtons() {
+        // For AI games, we'll just enable the "Return to Lobby" button
+        // For online games, we'll implement this in the handlers
+    }
+    
+    /**
+     * Requests to play again or decline a rematch.
      * 
-     * @param playerWon Whether the player won the game
+     * @param wantToPlayAgain Whether the player wants to play again
      */
-    private void showGameOverDialog(boolean playerWon) {
-        // Create the dialog
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Game Over");
-        
-        // Set the content
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(10));
-        content.setAlignment(Pos.CENTER);
-        
-        String resultText;
-        if (gameState.getStatus() == GameStatus.DRAW) {
-            resultText = "It's a draw!";
-        } else {
-            String winnerName = playerWon ? gameClient.getUsername() : opponentUsername;
-            resultText = winnerName + " won!";
-        }
-        
-        Label resultLabel = new Label(resultText);
-        resultLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        
-        Label questionLabel = new Label("Would you like to play again?");
-        
-        content.getChildren().addAll(resultLabel, questionLabel);
-        
-        dialog.getDialogPane().setContent(content);
-        
-        // Add buttons
-        ButtonType playAgainButton = new ButtonType("New Game", ButtonBar.ButtonData.YES);
-        ButtonType quitButton = new ButtonType("Quit", ButtonBar.ButtonData.NO);
-        
-        dialog.getDialogPane().getButtonTypes().addAll(playAgainButton, quitButton);
-        
-        // Show the dialog
-        dialog.showAndWait().ifPresent(response -> {
-            if (response == playAgainButton) {
-                gameClient.requestPlayAgain(true);
+    private void requestPlayAgain(boolean wantToPlayAgain) {
+        if (isAIGame) {
+            if (wantToPlayAgain) {
+                // Create a new game state for the AI game
+                gameState = new GameState(gameClient.getUsername(), opponentUsername);
+                
+                // Reset the AI game
+                isAITurn = (playerColor != PlayerColor.RED);
+                
+                // Update the UI
+                updateBoard();
+                updateGameStatus();
+                
+                // If AI goes first, make AI move
+                if (isAITurn) {
+                    makeAIMove();
+                }
             } else {
-                gameClient.requestPlayAgain(false);
-                
-                // Go back to login screen
-                gameClient.removeGameStateListener(this);
-                gameClient.removeConnectionListener(this);
-                gameClient.removeChatMessageListener(this);
-                
-                LoginScreen loginScreen = new LoginScreen(stage, gameClient);
-                loginScreen.show();
+                returnToLobby();
             }
-        });
+        } else {
+            // For online games, send the request to the server
+            gameClient.requestPlayAgain(wantToPlayAgain);
+        }
     }
     
     /**
-     * Shows a dialog when the opponent disconnects.
+     * Returns to the lobby/waiting screen.
      */
-    private void showOpponentDisconnectedDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Opponent Disconnected");
-        alert.setHeaderText("Your opponent has disconnected");
-        alert.setContentText("You will be returned to the login screen.");
+    private void returnToLobby() {
+        // Clear game state
+        gameState = null;
         
-        alert.showAndWait();
-        
-        // Go back to login screen
-        gameClient.removeGameStateListener(this);
-        gameClient.removeConnectionListener(this);
-        gameClient.removeChatMessageListener(this);
-        
-        LoginScreen loginScreen = new LoginScreen(stage, gameClient);
-        loginScreen.show();
-    }
-    
-    /**
-     * Shows a dialog when the opponent declines a rematch.
-     */
-    private void showOpponentDeclinedRematchDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("No Rematch");
-        alert.setHeaderText("Your opponent declined to play again");
-        alert.setContentText("You will be returned to the login screen.");
-        
-        alert.showAndWait();
-        
-        // Go back to login screen
-        gameClient.removeGameStateListener(this);
-        gameClient.removeConnectionListener(this);
-        gameClient.removeChatMessageListener(this);
-        
-        LoginScreen loginScreen = new LoginScreen(stage, gameClient);
-        loginScreen.show();
+        // Show waiting screen
+        WaitingScreen waitingScreen = new WaitingScreen(stage, gameClient);
+        waitingScreen.show();
     }
     
     @Override
@@ -490,55 +497,69 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     
     @Override
     public void onOpponentDisconnected() {
-        showOpponentDisconnectedDialog();
+        statusLabel.setText("Opponent disconnected");
+        
+        // Return to waiting screen
+        WaitingScreen waitingScreen = new WaitingScreen(stage, gameClient);
+        waitingScreen.show();
     }
     
     @Override
     public void onOpponentDeclinedRematch() {
-        showOpponentDeclinedRematchDialog();
+        statusLabel.setText("Opponent declined rematch");
+        
+        // Return to waiting screen
+        WaitingScreen waitingScreen = new WaitingScreen(stage, gameClient);
+        waitingScreen.show();
     }
     
     @Override
     public void onConnectionEstablished() {
-        // Not used in game screen
+        // Not used
     }
     
     @Override
     public void onConnectionFailed(String reason) {
-        // Not used in game screen
+        // Not used
     }
     
     @Override
     public void onDisconnected(String reason) {
-        // Show login screen again
-        gameClient.removeGameStateListener(this);
-        gameClient.removeConnectionListener(this);
-        gameClient.removeChatMessageListener(this);
+        // Show a message
+        statusLabel.setText("Disconnected: " + reason);
         
-        LoginScreen loginScreen = new LoginScreen(stage, gameClient);
-        loginScreen.show();
+        if (isAIGame) {
+            // For AI games, just return to the waiting screen
+            returnToLobby();
+        } else {
+            // For online games, return to login screen
+            LoginScreen loginScreen = new LoginScreen(stage, gameClient);
+            loginScreen.show();
+        }
     }
     
     @Override
     public void onLoginSuccessful() {
-        // Not used in game screen
+        // Not used
     }
     
     @Override
     public void onLoginFailed(String reason) {
-        // Not used in game screen
+        // Not used
     }
     
     @Override
     public void onChatMessageReceived(ChatMessage message) {
-        Text messageSender = new Text(message.getSender() + ": ");
-        messageSender.setStyle("-fx-font-weight: bold;");
-        
-        Text messageContent = new Text(message.getContent() + "\n");
-        
-        chatFlow.getChildren().addAll(messageSender, messageContent);
-        
-        // Scroll to the bottom
-        chatFlow.layout();
+        Platform.runLater(() -> {
+            Text senderText = new Text(message.getSender() + ": ");
+            senderText.setStyle("-fx-font-weight: bold;");
+            
+            Text messageText = new Text(message.getContent() + "\n");
+            
+            chatFlow.getChildren().addAll(senderText, messageText);
+            
+            // Auto-scroll to the bottom
+            ((ScrollPane) chatFlow.getParent()).setVvalue(1.0);
+        });
     }
 } 

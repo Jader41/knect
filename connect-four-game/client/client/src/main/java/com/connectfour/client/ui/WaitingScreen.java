@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -54,11 +55,22 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
             loginScreen.show();
         });
         
+        Button playVsComputerButton = new Button("Play vs Computer");
+        playVsComputerButton.setOnAction(e -> {
+            stopWaitingAnimation();
+            showAIDifficultySelection();
+        });
+        
+        // Create button layout
+        HBox buttonLayout = new HBox(10);
+        buttonLayout.setAlignment(Pos.CENTER);
+        buttonLayout.getChildren().addAll(cancelButton, playVsComputerButton);
+        
         // Create layout
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(titleLabel, statusLabel, cancelButton);
+        layout.getChildren().addAll(titleLabel, statusLabel, buttonLayout);
         
         // Create scene
         Scene scene = new Scene(layout, 400, 300);
@@ -68,6 +80,74 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         
         // Start waiting animation
         startWaitingAnimation();
+    }
+    
+    /**
+     * Shows the AI difficulty selection screen.
+     */
+    private void showAIDifficultySelection() {
+        // Remove from matchmaking queue if we're in it
+        gameClient.cancelMatchmaking();
+        
+        // Create UI components
+        Label titleLabel = new Label("Select AI Difficulty");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        
+        Label promptLabel = new Label("Choose computer difficulty level:");
+        promptLabel.setStyle("-fx-font-size: 16px;");
+        
+        Button easyButton = new Button("Easy");
+        easyButton.setPrefWidth(120);
+        easyButton.setOnAction(e -> startAIGame("Easy"));
+        
+        Button mediumButton = new Button("Medium");
+        mediumButton.setPrefWidth(120);
+        mediumButton.setOnAction(e -> startAIGame("Medium"));
+        
+        Button hardButton = new Button("Hard");
+        hardButton.setPrefWidth(120);
+        hardButton.setOnAction(e -> startAIGame("Hard"));
+        
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> show()); // Go back to waiting screen
+        
+        // Create difficulty buttons layout
+        VBox difficultyButtons = new VBox(10);
+        difficultyButtons.setAlignment(Pos.CENTER);
+        difficultyButtons.getChildren().addAll(easyButton, mediumButton, hardButton);
+        
+        // Create layout
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        layout.getChildren().addAll(titleLabel, promptLabel, difficultyButtons, backButton);
+        
+        // Create scene
+        Scene scene = new Scene(layout, 400, 300);
+        
+        // Set the scene to the stage
+        stage.setScene(scene);
+    }
+    
+    /**
+     * Starts a game against the AI with the specified difficulty.
+     * 
+     * @param difficulty The AI difficulty level
+     */
+    private void startAIGame(String difficulty) {
+        // Remove from matchmaking queue if we're in it
+        gameClient.cancelMatchmaking();
+        
+        // Remove listeners before starting AI game to avoid unnecessary callbacks
+        gameClient.removeConnectionListener(this);
+        gameClient.removeGameStateListener(this);
+        
+        // Create a local game state
+        GameState gameState = new GameState(gameClient.getUsername(), "Computer (" + difficulty + ")");
+        
+        // Show the game screen with AI opponent
+        GameScreen gameScreen = new GameScreen(stage, gameClient, gameState, PlayerColor.RED, difficulty);
+        gameScreen.show();
     }
     
     /**

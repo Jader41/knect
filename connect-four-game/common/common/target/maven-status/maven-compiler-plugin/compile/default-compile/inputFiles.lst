@@ -1,6 +1,7 @@
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/GameStatus.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/PlayAgainResponseMessage.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/GameStateUpdateMessage.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/CancelMatchmakingMessage.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/GameState.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/GameStartMessage.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/Message.java

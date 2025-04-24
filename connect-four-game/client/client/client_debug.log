@@ -1,0 +1,27 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.connectfour.client:client >--------------------
+[INFO] Building Connect Four Client 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[WARNING] 6 problems were encountered while building the effective model for org.openjfx:javafx-controls:jar:21.0.2 during dependency collection step for project (use -X to see details)
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ client ---
+[INFO] Deleting /Users/wale/5/connect-four-game/client/client/target
+[INFO] 
+[INFO] >>> javafx:0.0.8:run (default-cli) > process-classes @ client >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ client ---
+[INFO] skip non existing resourceDirectory /Users/wale/5/connect-four-game/client/client/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ client ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 7 source files with javac [debug target 17] to target/classes
+[WARNING] location of system modules is not set in conjunction with -source 17
+  not setting the location of system modules may lead to class files that cannot run on JDK 17
+    --release 17 is recommended instead of -source 17 -target 17 because it sets the location of system modules automatically
+[INFO] 
+[INFO] <<< javafx:0.0.8:run (default-cli) < process-classes @ client <<<
+[INFO] 
+[INFO] 
+[INFO] --- javafx:0.0.8:run (default-cli) @ client ---
