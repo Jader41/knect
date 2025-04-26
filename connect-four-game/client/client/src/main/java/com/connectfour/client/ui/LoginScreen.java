@@ -1,14 +1,20 @@
 package com.connectfour.client.ui;
 
 import com.connectfour.client.GameClient;
+import com.connectfour.client.ai.AIPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -18,7 +24,8 @@ public class LoginScreen implements GameClient.ConnectionListener {
     private final Stage stage;
     private final GameClient gameClient;
     private TextField usernameField;
-    private Button loginButton;
+    private Button playOnlineButton;
+    private Button playWithComputerButton;
     private Label statusLabel;
     
     public LoginScreen(Stage stage, GameClient gameClient) {
@@ -33,40 +40,60 @@ public class LoginScreen implements GameClient.ConnectionListener {
      * Shows the login screen.
      */
     public void show() {
+        // Get screen dimensions
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double screenWidth = screenBounds.getWidth();
+        double screenHeight = screenBounds.getHeight();
+        
+        // Calculate 50% of screen size
+        double width = screenWidth * 0.5;
+        double height = screenHeight * 0.5;
+        
         // Create UI components
         Label titleLabel = new Label("Connect Four");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
         
         Label usernameLabel = new Label("Username:");
         usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
-        usernameField.setMaxWidth(200);
+        usernameField.setMaxWidth(250);
         
-        loginButton = new Button("Login");
-        loginButton.setDefaultButton(true);
-        loginButton.setOnAction(e -> login());
+        // Create buttons
+        playOnlineButton = new Button("Play Online");
+        playOnlineButton.setDefaultButton(true);
+        playOnlineButton.setOnAction(e -> connectToServer());
+        
+        playWithComputerButton = new Button("Play with Computer");
+        playWithComputerButton.setOnAction(e -> startLocalGame());
+        
+        // Create button layout
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(playOnlineButton, playWithComputerButton);
         
         statusLabel = new Label("");
         statusLabel.setStyle("-fx-text-fill: red;");
         
         // Create layout
-        VBox layout = new VBox(10);
+        VBox layout = new VBox(15);
         layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(titleLabel, usernameLabel, usernameField, loginButton, statusLabel);
+        layout.setPadding(new Insets(30));
+        layout.getChildren().addAll(titleLabel, usernameLabel, usernameField, buttonBox, statusLabel);
         
-        // Create scene
-        Scene scene = new Scene(layout, 400, 300);
+        // Create scene with 50% of screen size
+        Scene scene = new Scene(layout, width, height);
         
-        // Set the scene to the stage
+        // Set the scene to the stage and center it
         stage.setScene(scene);
+        stage.setX((screenWidth - width) / 2);
+        stage.setY((screenHeight - height) / 2);
         stage.show();
     }
     
     /**
-     * Attempts to log in with the username entered in the field.
+     * Attempts to connect to server for online play.
      */
-    private void login() {
+    private void connectToServer() {
         String username = usernameField.getText().trim();
         
         if (username.isEmpty()) {
@@ -79,13 +106,88 @@ public class LoginScreen implements GameClient.ConnectionListener {
             return;
         }
         
-        // Disable the login button and update status
-        loginButton.setDisable(true);
-        statusLabel.setText("Connecting...");
+        // Disable the buttons and update status
+        playOnlineButton.setDisable(true);
+        playWithComputerButton.setDisable(true);
+        statusLabel.setText("Connecting to server...");
         statusLabel.setStyle("-fx-text-fill: blue;");
         
         // Connect to the server
         gameClient.connect(username);
+    }
+    
+    /**
+     * Start a local game against the computer AI.
+     */
+    private void startLocalGame() {
+        String username = usernameField.getText().trim();
+        
+        if (username.isEmpty()) {
+            statusLabel.setText("Username cannot be empty");
+            return;
+        }
+        
+        if (username.length() > 20) {
+            statusLabel.setText("Username must be at most 20 characters");
+            return;
+        }
+        
+        // Create difficulty selection dialog
+        VBox dialogContent = new VBox(10);
+        dialogContent.setAlignment(Pos.CENTER);
+        dialogContent.setPadding(new Insets(20));
+        
+        Label difficultyLabel = new Label("Select AI Difficulty:");
+        difficultyLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        
+        // Create difficulty buttons
+        Button easyButton = new Button("Easy");
+        Button mediumButton = new Button("Medium");
+        Button hardButton = new Button("Hard");
+        
+        // Style buttons
+        String buttonStyle = "-fx-min-width: 100px; -fx-padding: 10px;";
+        easyButton.setStyle(buttonStyle);
+        mediumButton.setStyle(buttonStyle);
+        hardButton.setStyle(buttonStyle);
+        
+        HBox buttonBox = new HBox(15);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(easyButton, mediumButton, hardButton);
+        
+        dialogContent.getChildren().addAll(difficultyLabel, buttonBox);
+        
+        // Create dialog
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("AI Difficulty");
+        dialog.getDialogPane().setContent(dialogContent);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        
+        // Set button actions
+        easyButton.setOnAction(e -> {
+            dialog.setResult("Easy");
+            dialog.close();
+        });
+        
+        mediumButton.setOnAction(e -> {
+            dialog.setResult("Medium");
+            dialog.close();
+        });
+        
+        hardButton.setOnAction(e -> {
+            dialog.setResult("Hard");
+            dialog.close();
+        });
+        
+        // Show dialog and start game with selected difficulty
+        dialog.showAndWait().ifPresent(difficulty -> {
+            // Remove this as a connection listener
+            gameClient.removeConnectionListener(this);
+            
+            // Start local game against AI with selected difficulty
+            GameScreen gameScreen = new GameScreen(stage, gameClient, username, "Computer (" + difficulty + ")", difficulty);
+            gameScreen.show();
+        });
     }
     
     @Override
@@ -97,14 +199,16 @@ public class LoginScreen implements GameClient.ConnectionListener {
     public void onConnectionFailed(String reason) {
         statusLabel.setText("Connection failed: " + reason);
         statusLabel.setStyle("-fx-text-fill: red;");
-        loginButton.setDisable(false);
+        playOnlineButton.setDisable(false);
+        playWithComputerButton.setDisable(false);
     }
     
     @Override
     public void onDisconnected(String reason) {
         statusLabel.setText("Disconnected: " + reason);
         statusLabel.setStyle("-fx-text-fill: red;");
-        loginButton.setDisable(false);
+        playOnlineButton.setDisable(false);
+        playWithComputerButton.setDisable(false);
     }
     
     @Override
@@ -121,6 +225,7 @@ public class LoginScreen implements GameClient.ConnectionListener {
     public void onLoginFailed(String reason) {
         statusLabel.setText("Login failed: " + reason);
         statusLabel.setStyle("-fx-text-fill: red;");
-        loginButton.setDisable(false);
+        playOnlineButton.setDisable(false);
+        playWithComputerButton.setDisable(false);
     }
 } 

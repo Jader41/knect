@@ -54,6 +54,9 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     private Button returnToLobbyButton;
     private HBox gameOverButtonsBox;
     
+    // Background sound player
+    private AudioPlayer backgroundMusic;
+    
     public GameScreen(Stage stage, GameClient gameClient) {
         this.stage = stage;
         this.gameClient = gameClient;
@@ -68,6 +71,9 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.gameState = gameClient.getCurrentGameState();
         this.playerColor = gameClient.getAssignedColor();
         this.opponentUsername = gameClient.getOpponentUsername();
+        
+        // Initialize background music
+        this.backgroundMusic = new AudioPlayer("somber_background.mp3");
     }
     
     /**
@@ -88,6 +94,33 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         
         // Determine if AI goes first (if AI is RED)
         this.isAITurn = (aiColor == PlayerColor.RED);
+        
+        // Initialize background music
+        this.backgroundMusic = new AudioPlayer("somber_background.mp3");
+    }
+    
+    /**
+     * Constructor for AI game with username and difficulty.
+     */
+    public GameScreen(Stage stage, GameClient gameClient, String username, String opponentLabel, String aiDifficulty) {
+        this.stage = stage;
+        this.gameClient = gameClient;
+        this.isAIGame = true;
+        this.aiDifficulty = aiDifficulty; // Use provided difficulty
+        this.opponentUsername = opponentLabel;
+        
+        // Create a new local game state
+        this.gameState = new GameState(username, "Computer");
+        
+        // Player always starts with RED in local games
+        this.playerColor = PlayerColor.RED;
+        
+        // Create AI player with YELLOW
+        this.aiPlayer = new AIPlayer(aiDifficulty, PlayerColor.YELLOW);
+        this.isAITurn = false; // Player goes first
+        
+        // Initialize background music
+        this.backgroundMusic = new AudioPlayer("somber_background.mp3");
     }
     
     /**
@@ -120,6 +153,10 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         // Update the board with the current game state
         updateBoard();
         updateGameStatus();
+        
+        // Start playing background music with increased volume
+        backgroundMusic.setVolume(10.0);
+        backgroundMusic.play();
         
         // If it's an AI game and AI goes first, make AI move
         if (isAIGame && isAITurn) {
@@ -461,6 +498,9 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
             gameOverButtonsBox.setVisible(true);
             gameOverButtonsBox.setManaged(true);
         }
+        
+        // Stop background music when the game is over
+        backgroundMusic.stop();
     }
     
     /**
@@ -495,15 +535,28 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     }
     
     /**
-     * Returns to the lobby/waiting screen.
+     * Returns to the lobby screen.
      */
     private void returnToLobby() {
-        // Clear game state
-        gameState = null;
+        // Stop background music when returning to lobby
+        if (backgroundMusic != null) {
+            backgroundMusic.stop();
+            backgroundMusic.dispose();
+        }
         
-        // Show waiting screen
-        WaitingScreen waitingScreen = new WaitingScreen(stage, gameClient);
-        waitingScreen.show();
+        // Send return to lobby request to server for online games
+        if (!isAIGame) {
+            gameClient.returnToLobby();
+        }
+        
+        // Clean up listeners
+        gameClient.removeGameStateListener(this);
+        gameClient.removeConnectionListener(this);
+        gameClient.removeChatMessageListener(this);
+        
+        // Show login screen
+        LoginScreen loginScreen = new LoginScreen(stage, gameClient);
+        loginScreen.show();
     }
     
     @Override
@@ -562,17 +615,23 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     
     @Override
     public void onDisconnected(String reason) {
-        // Show a message
-        statusLabel.setText("Disconnected: " + reason);
-        
-        if (isAIGame) {
-            // For AI games, just return to the waiting screen
-            returnToLobby();
-        } else {
-            // For online games, return to login screen
+        Platform.runLater(() -> {
+            // Stop background music on disconnection
+            if (backgroundMusic != null) {
+                backgroundMusic.stop();
+                backgroundMusic.dispose();
+            }
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Disconnected");
+            alert.setHeaderText(null);
+            alert.setContentText("Disconnected from server: " + reason);
+            alert.showAndWait();
+            
+            // Return to login screen
             LoginScreen loginScreen = new LoginScreen(stage, gameClient);
             loginScreen.show();
-        }
+        });
     }
     
     @Override

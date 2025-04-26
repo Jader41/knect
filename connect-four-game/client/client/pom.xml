@@ -27,6 +27,11 @@
       <version>${javafx.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.10.0</version>
@@ -46,6 +51,16 @@
   </dependencies>
   
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.mp3</include>
+          <include>**/*.wav</include>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -58,6 +73,12 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>com.connectfour.client.ClientApp</mainClass>
+          <options>
+            <option>--add-opens</option>
+            <option>javafx.graphics/javafx.scene=org.controlsfx.controls</option>
+            <option>--add-modules</option>
+            <option>javafx.controls,javafx.fxml,javafx.media</option>
+          </options>
         </configuration>
       </plugin>
       <plugin>

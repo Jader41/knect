@@ -14,4 +14,5 @@
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/MessageType.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/LoginRequestMessage.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/PlayerColor.java
+/Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/messages/ReturnToLobbyMessage.java
 /Users/wale/5/connect-four-game/common/common/src/main/java/com/connectfour/common/model/CellState.java

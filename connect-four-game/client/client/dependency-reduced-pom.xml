@@ -7,6 +7,16 @@
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.mp3</include>
+          <include>**/*.wav</include>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,6 +28,12 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>com.connectfour.client.ClientApp</mainClass>
+          <options>
+            <option>--add-opens</option>
+            <option>javafx.graphics/javafx.scene=org.controlsfx.controls</option>
+            <option>--add-modules</option>
+            <option>javafx.controls,javafx.fxml,javafx.media</option>
+          </options>
         </configuration>
       </plugin>
       <plugin>

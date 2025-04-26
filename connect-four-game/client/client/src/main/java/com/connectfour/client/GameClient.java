@@ -325,6 +325,13 @@ public class GameClient {
     }
     
     /**
+     * Requests to return to the lobby.
+     */
+    public void returnToLobby() {
+        sendMessage(new ReturnToLobbyMessage());
+    }
+    
+    /**
      * Interface for connection-related events.
      */
     public interface ConnectionListener {

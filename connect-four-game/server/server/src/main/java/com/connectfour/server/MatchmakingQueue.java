@@ -31,7 +31,7 @@ public class MatchmakingQueue implements Runnable {
     public void addToQueue(ClientHandler client) {
         if (!queue.contains(client)) {
             queue.add(client);
-            logger.debug("Added client to matchmaking queue: {}", client.getUsername());
+            logger.info("Added client to matchmaking queue: {}. Queue size: {}", client.getUsername(), queue.size());
         }
     }
     
@@ -42,7 +42,7 @@ public class MatchmakingQueue implements Runnable {
      */
     public void removeFromQueue(ClientHandler client) {
         queue.remove(client);
-        logger.debug("Removed client from matchmaking queue: {}", client.getUsername());
+        logger.info("Removed client from matchmaking queue: {}. Queue size: {}", client.getUsername(), queue.size());
     }
     
     @Override
@@ -68,6 +68,10 @@ public class MatchmakingQueue implements Runnable {
      * Attempts to match waiting players.
      */
     private void matchPlayers() {
+        if (queue.size() >= 2) {
+            logger.info("Attempting to match players. Current queue size: {}", queue.size());
+        }
+        
         while (queue.size() >= 2) {
             ClientHandler player1 = queue.poll();
             ClientHandler player2 = queue.poll();
@@ -81,14 +85,17 @@ public class MatchmakingQueue implements Runnable {
                     // Start the game
                     gameSession.start();
                     
-                    logger.info("Matched players: {} vs {}", player1.getUsername(), player2.getUsername());
+                    logger.info("Matched players: {} vs {}. Remaining in queue: {}", 
+                        player1.getUsername(), player2.getUsername(), queue.size());
                 } else {
                     // If one of the clients is disconnected, put the connected one back in the queue
                     if (player1.isConnected()) {
                         queue.add(player1);
+                        logger.info("Player {} reconnected to queue after failed match", player1.getUsername());
                     }
                     if (player2.isConnected()) {
                         queue.add(player2);
+                        logger.info("Player {} reconnected to queue after failed match", player2.getUsername());
                     }
                 }
             }

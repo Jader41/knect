@@ -104,6 +104,9 @@ public class ClientHandler implements Runnable {
         else if (type == MessageType.CANCEL_MATCHMAKING) {
             handleCancelMatchmaking();
         }
+        else if (type == MessageType.RETURN_TO_LOBBY) {
+            handleReturnToLobby();
+        }
         else if (type == MessageType.GAME_START) {
             // Just ignoring this message type
             logger.warn("Received GAME_START message from client, which shouldn't happen");
@@ -198,6 +201,7 @@ public class ClientHandler implements Runnable {
             if (message.wantsToPlayAgain()) {
                 inMatchmaking = true;
                 server.addToMatchmaking(this);
+                logger.info("Player {} requested to play again and was added to matchmaking queue", username);
             }
         }
     }
@@ -240,13 +244,15 @@ public class ClientHandler implements Runnable {
     private void handleReturnToLobby() {
         if (currentGame != null) {
             currentGame.handleReturnToLobbyRequest(this);
+            currentGame = null;
         } else {
             logger.warn("Received return to lobby request from {} but not in a game", username);
-            
-            // If they want to return to lobby but aren't in a game, add to matchmaking
-            inMatchmaking = true;
-            server.addToMatchmaking(this);
         }
+        
+        // Always add the player back to matchmaking when they return to lobby
+        inMatchmaking = true;
+        server.addToMatchmaking(this);
+        logger.info("Player {} returned to lobby and added to matchmaking queue", username);
     }
     
     /**

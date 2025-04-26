@@ -15,5 +15,6 @@ public enum MessageType implements Serializable {
     PLAY_AGAIN_REQUEST,
     PLAY_AGAIN_RESPONSE,
     DISCONNECT,
-    CANCEL_MATCHMAKING
+    CANCEL_MATCHMAKING,
+    RETURN_TO_LOBBY
 } 

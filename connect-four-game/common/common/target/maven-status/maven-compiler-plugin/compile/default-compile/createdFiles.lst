@@ -5,6 +5,7 @@ com/connectfour/common/messages/MessageType.class
 com/connectfour/common/model/GameStatus.class
 com/connectfour/common/messages/LoginRequestMessage.class
 com/connectfour/common/model/PlayerColor.class
+com/connectfour/common/messages/ReturnToLobbyMessage.class
 com/connectfour/common/messages/GameStateUpdateMessage.class
 com/connectfour/common/messages/PlayAgainResponseMessage.class
 com/connectfour/common/App.class

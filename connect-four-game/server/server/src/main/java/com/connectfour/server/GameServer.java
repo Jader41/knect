@@ -28,7 +28,7 @@ public class GameServer {
     private ServerSocket serverSocket;
     private boolean running;
     private final List<ClientHandler> connectedClients;
-    private final List<ClientHandler> matchmakingQueue;
+    private final MatchmakingQueue matchmakingQueue;
     private final List<GameSession> activeSessions;
     private final ExecutorService executorService;
     private final Map<String, ClientHandler> usernameMap = new ConcurrentHashMap<>();
@@ -41,9 +41,15 @@ public class GameServer {
     public GameServer(int port) {
         this.port = port;
         this.connectedClients = Collections.synchronizedList(new ArrayList<>());
-        this.matchmakingQueue = Collections.synchronizedList(new ArrayList<>());
         this.activeSessions = Collections.synchronizedList(new ArrayList<>());
         this.executorService = Executors.newCachedThreadPool();
+        this.matchmakingQueue = new MatchmakingQueue(this);
+        
+        // Start the matchmaking queue
+        Thread matchmakingThread = new Thread(matchmakingQueue);
+        matchmakingThread.setDaemon(true);
+        matchmakingThread.start();
+        
         instance = this;
     }
     
@@ -162,7 +168,7 @@ public class GameServer {
      * @param client The client to remove
      */
     public void removeFromMatchmaking(ClientHandler client) {
-        matchmakingQueue.remove(client);
+        matchmakingQueue.removeFromQueue(client);
     }
     
     /**
@@ -172,7 +178,7 @@ public class GameServer {
      */
     public void removeClient(ClientHandler client) {
         connectedClients.remove(client);
-        matchmakingQueue.remove(client);
+        matchmakingQueue.removeFromQueue(client);
         logger.info("Client removed: {}", client.getUsername());
         clientDisconnected(client);
     }
@@ -203,31 +209,7 @@ public class GameServer {
      * @param client The client to add to matchmaking
      */
     public void addToMatchmaking(ClientHandler client) {
-        if (!matchmakingQueue.contains(client)) {
-            matchmakingQueue.add(client);
-            logger.info("Added client to matchmaking queue: {}", client.getUsername());
-            
-            // Check if we can start a new game
-            checkMatchmaking();
-        }
-    }
-    
-    /**
-     * Checks if there are enough players in the matchmaking queue to start a new game.
-     */
-    private synchronized void checkMatchmaking() {
-        if (matchmakingQueue.size() >= 2) {
-            // Get the first two players in the queue
-            ClientHandler player1 = matchmakingQueue.remove(0);
-            ClientHandler player2 = matchmakingQueue.remove(0);
-            
-            // Create a new game session
-            GameSession gameSession = new GameSession(player1, player2, this);
-            activeSessions.add(gameSession);
-            
-            logger.info("Created new game session between {} and {}", 
-                player1.getUsername(), player2.getUsername());
-        }
+        matchmakingQueue.addToQueue(client);
     }
     
     /**

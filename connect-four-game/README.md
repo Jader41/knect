@@ -13,6 +13,7 @@ A network-based implementation of the classic Connect Four game with a JavaFX GU
 - Play again functionality after a game ends
 - Win/loss/draw detection
 - Graceful handling of disconnections
+- Somber background music during gameplay
 
 ## Project Structure
 
@@ -39,61 +40,51 @@ The project consists of three Maven modules:
 1. Clone the repository
 2. Build the project with Maven:
 
+First, build the common module (must be done first):
 ```
-cd connect-four-game
-```
-
-Build the common module first:
-```
-cd common/common
+cd /path/to/connect-four-game/common/common
 mvn clean install
 ```
 
-Build the server:
-```
-cd ../../server/server
-mvn clean package
-```
-
-Build the client:
-```
-cd ../../client/client
-mvn clean package
-```
+Then build the server and client modules individually.
 
 ## Running the Project
 
 ### Starting the Server
 
-Navigate to the server directory and run:
+Use Maven's JavaFX plugin to run the server:
 
 ```
-cd server/server
-java -jar target/server-1.0-SNAPSHOT.jar
+cd /path/to/connect-four-game/server/server
+mvn javafx:run
 ```
 
-By default, the server runs on port 8080. You can specify a different port by passing it as a command-line argument:
+Example:
+```
+cd /Users/wale/5/connect-four-game/server/server && mvn javafx:run
+```
 
-```
-java -jar target/server-1.0-SNAPSHOT.jar 9090
-```
+By default, the server runs on port 8080.
 
 ### Starting the Client
 
-For macOS/Linux, navigate to the client directory and run:
+Use Maven's JavaFX plugin to run the client:
 
 ```
-cd client/client
+cd /path/to/connect-four-game/client/client
 mvn javafx:run
 ```
 
-For Windows:
+Example:
 ```
-cd client\client
-mvn javafx:run
+cd /Users/wale/5/connect-four-game/client/client && mvn javafx:run
 ```
 
 **Note:** Make sure the server is running before starting the client.
+
+### Running Multiple Client Instances
+
+To test multiplayer functionality, you can run multiple client instances in separate terminal windows using the same command.
 
 ## How to Play
 
@@ -102,21 +93,21 @@ mvn javafx:run
 1. Start the server
 2. Start at least two client instances
 3. Enter a username in each client
-4. The server will match players automatically
-5. Take turns dropping discs into the columns
-6. Connect four discs of your color horizontally, vertically, or diagonally to win
-7. Use the chat feature to communicate with your opponent
-8. When a game ends, use the "Play Again" button to start a new game or "Return to Lobby" to go back to matchmaking
+4. Click "Play Online" to connect to the server
+5. The server will match players automatically
+6. Take turns dropping discs into the columns
+7. Connect four discs of your color horizontally, vertically, or diagonally to win
+8. Use the chat feature to communicate with your opponent
+9. When a game ends, use the "Play Again" button to start a new game or "Return to Lobby" to go back to matchmaking
 
 ### Playing Against Computer (AI)
 
-1. Start the server (required for authentication)
-2. Start a client and enter a username
-3. In the waiting screen, click "Play vs Computer"
-4. Select a difficulty level (Easy, Medium, or Hard)
-5. The game will start with you as the Red player and the AI as the Yellow player
-6. Take turns making moves
-7. After the game ends, you can use the "Play Again" button to start a new game with the AI or "Return to Lobby" to go back to matchmaking
+1. Start a client and enter a username
+2. Click "Play with Computer"
+3. Select a difficulty level (Easy, Medium, or Hard)
+4. The game will start with you as the Red player and the AI as the Yellow player
+5. Take turns making moves
+6. After the game ends, you can use the "Play Again" button to start a new game with the AI or "Return to Lobby" to go back to the main screen
 
 ## Game Rules
 
@@ -135,9 +126,9 @@ mvn javafx:run
 
 ## Troubleshooting
 
-- **Port already in use error**: If you receive a "Address already in use" error when starting the server, use the command `pkill -9 -f "java"` to kill all running Java processes and try again.
-- **Client crashes**: If the client crashes with a "ConcurrentModificationException", ensure you're running the latest version by rebuilding with `mvn clean package`.
-- **JavaFX runtime missing**: If you see an error about missing JavaFX runtime components, use `mvn javafx:run` instead of directly running the JAR file.
+- **Port already in use error**: If you receive a "Address already in use" error when starting the server, use the command `pkill -f java` to kill all running Java processes and try again.
+- **Client crashes**: If the client crashes with a "ConcurrentModificationException", ensure you're running the latest version by rebuilding the common module first with `mvn clean install`.
+- **Cannot find symbol errors**: If you encounter compilation errors about missing classes or symbols, make sure you've built the common module first using `mvn clean install` before building the server or client.
 
 ## Technology Stack
 

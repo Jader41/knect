@@ -15,10 +15,18 @@ public class ClientApp extends Application {
     private String host;
     private int port;
     
+    // Add required JavaFX modules for media playback
+    static {
+        System.setProperty("javafx.verbose", "true");
+        System.setProperty("prism.verbose", "true");
+        System.setProperty("javafx.sound", "true");
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         // Set the window title
         primaryStage.setTitle("Connect Four");
+        primaryStage.setResizable(false);
         
         // Get the host and port from parameters or use defaults
         Parameters params = getParameters();

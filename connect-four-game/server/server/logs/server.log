@@ -787,3 +787,427 @@ java.net.BindException: Address already in use
 2025-04-26 13:06:17.364 [pool-2-thread-4] DEBUG c.connectfour.server.ClientHandler - Sent message to g5h: GAME_STATE_UPDATE
 2025-04-26 13:06:17.364 [pool-2-thread-4] DEBUG c.connectfour.server.ClientHandler - Sent message to tlun: GAME_STATE_UPDATE
 2025-04-26 13:06:17.364 [pool-2-thread-4] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 13:35:07.829 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matchmaking queue started
+2025-04-26 13:35:07.836 [Thread-4] INFO  com.connectfour.server.GameServer - Server started on port 8080
+2025-04-26 13:36:17.081 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 13:36:17.095 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: LOGIN_RESPONSE
+2025-04-26 13:36:17.096 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - User logged in: dfhk
+2025-04-26 13:36:17.096 [pool-2-thread-1] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: dfhk. Queue size: 1
+2025-04-26 13:36:44.405 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 13:36:44.414 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: LOGIN_RESPONSE
+2025-04-26 13:36:44.414 [pool-2-thread-2] INFO  c.connectfour.server.ClientHandler - User logged in: erghp
+2025-04-26 13:36:44.415 [pool-2-thread-2] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: erghp. Queue size: 2
+2025-04-26 13:36:45.150 [Thread-3] INFO  c.c.server.MatchmakingQueue - Attempting to match players. Current queue size: 2
+2025-04-26 13:36:45.163 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_START
+2025-04-26 13:36:45.164 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_START
+2025-04-26 13:36:45.164 [Thread-3] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 13:36:45.165 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:36:45.165 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:36:45.165 [Thread-3] INFO  com.connectfour.server.GameSession - Started new game session between dfhk and erghp
+2025-04-26 13:36:45.166 [Thread-3] INFO  com.connectfour.server.GameSession - Starting game session between dfhk and erghp
+2025-04-26 13:36:45.166 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_START
+2025-04-26 13:36:45.166 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_START
+2025-04-26 13:36:45.166 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matched players: dfhk vs erghp. Remaining in queue: 0
+2025-04-26 13:36:56.050 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by dfhk in column 5. Current turn: 1, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:36:56.050 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk placed RED piece at row 5, column 5
+2025-04-26 13:36:56.051 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk made successful move in column 5. New turn: 2
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:56.051 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:56.052 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:36:56.052 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 13:36:56.053 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:36:56.053 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:36:56.054 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 13:36:57.273 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by erghp in column 3. Current turn: 2, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:36:57.274 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp placed YELLOW piece at row 5, column 3
+2025-04-26 13:36:57.274 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp made successful move in column 3. New turn: 1
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][Y][ ][R][ ]
+2025-04-26 13:36:57.274 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 13:36:57.275 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:36:57.275 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:36:57.275 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 13:36:58.814 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by dfhk in column 5. Current turn: 1, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:36:58.815 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk placed RED piece at row 4, column 5
+2025-04-26 13:36:58.816 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk made successful move in column 5. New turn: 2
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:36:58.816 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][Y][ ][R][ ]
+2025-04-26 13:36:58.817 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 13:36:58.817 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:36:58.818 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:36:58.818 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 13:37:00.477 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by erghp in column 1. Current turn: 2, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:37:00.478 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp placed YELLOW piece at row 5, column 1
+2025-04-26 13:37:00.478 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp made successful move in column 1. New turn: 1
+2025-04-26 13:37:00.478 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:37:00.478 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:00.478 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:00.479 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:00.479 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:00.479 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:00.479 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][Y][ ][R][ ]
+2025-04-26 13:37:00.479 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 13:37:00.480 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:37:00.480 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:37:00.480 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 13:37:01.605 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by dfhk in column 5. Current turn: 1, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:37:01.606 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk placed RED piece at row 3, column 5
+2025-04-26 13:37:01.607 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk made successful move in column 5. New turn: 2
+2025-04-26 13:37:01.607 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:37:01.607 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:01.607 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:01.607 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:01.608 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:01.608 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:01.608 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][Y][ ][R][ ]
+2025-04-26 13:37:01.608 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 13:37:01.608 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:37:01.609 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:37:01.609 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 13:37:02.644 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by erghp in column 1. Current turn: 2, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:37:02.645 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp placed YELLOW piece at row 4, column 1
+2025-04-26 13:37:02.646 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player erghp made successful move in column 1. New turn: 1
+2025-04-26 13:37:02.646 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:37:02.646 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:02.646 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:02.646 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:02.646 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:02.647 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][ ][ ][R][ ]
+2025-04-26 13:37:02.647 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][Y][ ][R][ ]
+2025-04-26 13:37:02.647 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 13:37:02.647 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:37:02.648 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:37:02.648 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 13:37:04.514 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by dfhk in column 5. Current turn: 1, Player1(RED): dfhk, Player2(YELLOW): erghp, isPlayersTurn: true
+2025-04-26 13:37:04.515 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk placed RED piece at row 2, column 5
+2025-04-26 13:37:04.516 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk wins!
+2025-04-26 13:37:04.516 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player dfhk made successful move in column 5. New turn: 2
+2025-04-26 13:37:04.516 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 13:37:04.516 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:04.516 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 13:37:04.516 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:04.517 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][R][ ]
+2025-04-26 13:37:04.517 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][ ][ ][R][ ]
+2025-04-26 13:37:04.517 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][Y][ ][Y][ ][R][ ]
+2025-04-26 13:37:04.517 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 13:37:04.518 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to dfhk: GAME_STATE_UPDATE
+2025-04-26 13:37:04.518 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to erghp: GAME_STATE_UPDATE
+2025-04-26 13:37:04.518 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 13:37:36.261 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 13:37:36.269 [pool-2-thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to gghd: LOGIN_RESPONSE
+2025-04-26 13:37:36.269 [pool-2-thread-3] INFO  c.connectfour.server.ClientHandler - User logged in: gghd
+2025-04-26 13:37:36.269 [pool-2-thread-3] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: gghd. Queue size: 1
+2025-04-26 13:44:59.061 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matchmaking queue started
+2025-04-26 13:44:59.067 [Thread-4] INFO  com.connectfour.server.GameServer - Server started on port 8080
+2025-04-26 13:45:56.226 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 13:45:56.242 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to tete: LOGIN_RESPONSE
+2025-04-26 13:45:56.243 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - User logged in: tete
+2025-04-26 13:45:56.243 [pool-2-thread-1] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: tete. Queue size: 1
+2025-04-26 13:46:07.099 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - Client tete requested disconnect: User closed application
+2025-04-26 13:46:07.104 [pool-2-thread-1] ERROR c.connectfour.server.ClientHandler - Error sending message to client: tete
+java.net.SocketException: Broken pipe
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:394)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:410)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1809)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1303)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1248)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1444)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1195)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1616)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:362)
+	at com.connectfour.server.ClientHandler.sendMessage(ClientHandler.java:319)
+	at com.connectfour.server.ClientHandler.disconnect(ClientHandler.java:337)
+	at com.connectfour.server.ClientHandler.handleDisconnect(ClientHandler.java:265)
+	at com.connectfour.server.ClientHandler.handleMessage(ClientHandler.java:102)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:55)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-26 13:46:07.107 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - Client disconnected: tete
+2025-04-26 13:46:07.108 [pool-2-thread-1] INFO  c.c.server.MatchmakingQueue - Removed client from matchmaking queue: tete. Queue size: 0
+2025-04-26 13:46:07.108 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - Client disconnected: tete
+2025-04-26 13:46:07.109 [pool-2-thread-1] ERROR c.connectfour.server.ClientHandler - Error cleaning up client handler
+java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.ensureOpenAndConnected(NioSocketImpl.java:163)
+	at java.base/sun.nio.ch.NioSocketImpl.beginWrite(NioSocketImpl.java:362)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:407)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.flush(ObjectOutputStream.java:1845)
+	at java.base/java.io.ObjectOutputStream.flush(ObjectOutputStream.java:737)
+	at java.base/java.io.ObjectOutputStream.close(ObjectOutputStream.java:759)
+	at com.connectfour.server.ClientHandler.cleanup(ClientHandler.java:301)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:71)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-26 13:48:51.420 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matchmaking queue started
+2025-04-26 13:48:51.426 [Thread-4] INFO  com.connectfour.server.GameServer - Server started on port 8080
+2025-04-26 17:52:23.107 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matchmaking queue started
+2025-04-26 17:52:23.112 [Thread-4] ERROR com.connectfour.server.GameServer - Error starting server on port 8080
+java.net.BindException: Address already in use
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:565)
+	at java.base/sun.nio.ch.Net.bind(Net.java:554)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:636)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:389)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:276)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:170)
+	at com.connectfour.server.GameServer.start(GameServer.java:72)
+	at com.connectfour.server.ServerLauncher.lambda$startServer$2(ServerLauncher.java:80)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-26 17:52:23.114 [Thread-4] INFO  com.connectfour.server.GameServer - Server shutdown complete
+2025-04-26 17:53:27.894 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 17:53:27.911 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: LOGIN_RESPONSE
+2025-04-26 17:53:27.912 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - User logged in: uigju
+2025-04-26 17:53:27.912 [pool-2-thread-1] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: uigju. Queue size: 1
+2025-04-26 17:53:51.440 [Thread-4] INFO  com.connectfour.server.GameServer - New client connected: 127.0.0.1
+2025-04-26 17:53:51.447 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: LOGIN_RESPONSE
+2025-04-26 17:53:51.448 [pool-2-thread-2] INFO  c.connectfour.server.ClientHandler - User logged in: jjj
+2025-04-26 17:53:51.448 [pool-2-thread-2] INFO  c.c.server.MatchmakingQueue - Added client to matchmaking queue: jjj. Queue size: 2
+2025-04-26 17:53:51.554 [Thread-3] INFO  c.c.server.MatchmakingQueue - Attempting to match players. Current queue size: 2
+2025-04-26 17:53:51.564 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_START
+2025-04-26 17:53:51.566 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_START
+2025-04-26 17:53:51.567 [Thread-3] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:53:51.567 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:53:51.568 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:53:51.568 [Thread-3] INFO  com.connectfour.server.GameSession - Started new game session between uigju and jjj
+2025-04-26 17:53:51.568 [Thread-3] INFO  com.connectfour.server.GameSession - Starting game session between uigju and jjj
+2025-04-26 17:53:51.568 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_START
+2025-04-26 17:53:51.569 [Thread-3] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_START
+2025-04-26 17:53:51.569 [Thread-3] INFO  c.c.server.MatchmakingQueue - Matched players: uigju vs jjj. Remaining in queue: 0
+2025-04-26 17:54:11.119 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by uigju in column 3. Current turn: 1, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:11.121 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju placed RED piece at row 5, column 3
+2025-04-26 17:54:11.122 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju made successful move in column 3. New turn: 2
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:11.123 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:11.124 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][ ][ ][ ]
+2025-04-26 17:54:11.124 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 17:54:11.125 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:11.126 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:11.127 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 17:54:14.061 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by jjj in column 4. Current turn: 2, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:14.061 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj placed YELLOW piece at row 5, column 4
+2025-04-26 17:54:14.062 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj made successful move in column 4. New turn: 1
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:14.062 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][Y][ ][ ]
+2025-04-26 17:54:14.063 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:54:14.064 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:14.064 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:14.065 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 17:54:19.652 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by uigju in column 5. Current turn: 1, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:19.653 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju placed RED piece at row 5, column 5
+2025-04-26 17:54:19.654 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju made successful move in column 5. New turn: 2
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:19.654 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][Y][R][ ]
+2025-04-26 17:54:19.655 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 17:54:19.656 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:19.656 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:19.656 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 17:54:21.642 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by jjj in column 4. Current turn: 2, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:21.644 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj placed YELLOW piece at row 4, column 4
+2025-04-26 17:54:21.644 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj made successful move in column 4. New turn: 1
+2025-04-26 17:54:21.644 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:21.644 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:21.644 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:21.644 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:21.644 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:21.645 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:21.645 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][Y][R][ ]
+2025-04-26 17:54:21.645 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:54:21.646 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:21.647 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:21.647 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 17:54:23.223 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by uigju in column 2. Current turn: 1, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:23.224 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju placed RED piece at row 5, column 2
+2025-04-26 17:54:23.224 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju made successful move in column 2. New turn: 2
+2025-04-26 17:54:23.224 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:23.224 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][R][R][Y][R][ ]
+2025-04-26 17:54:23.225 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 17:54:23.226 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:23.227 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:23.228 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 17:54:25.053 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by jjj in column 4. Current turn: 2, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:25.055 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj placed YELLOW piece at row 3, column 4
+2025-04-26 17:54:25.055 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj made successful move in column 4. New turn: 1
+2025-04-26 17:54:25.055 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:25.055 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:25.055 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:25.055 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:25.055 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:25.056 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:25.056 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][R][R][Y][R][ ]
+2025-04-26 17:54:25.056 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:54:25.057 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:25.058 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:25.058 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 17:54:27.388 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by uigju in column 3. Current turn: 1, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:27.389 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju placed RED piece at row 4, column 3
+2025-04-26 17:54:27.390 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju made successful move in column 3. New turn: 2
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][Y][ ][ ]
+2025-04-26 17:54:27.390 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][R][R][Y][R][ ]
+2025-04-26 17:54:27.391 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 17:54:27.391 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:27.392 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:27.392 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 17:54:29.154 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by jjj in column 4. Current turn: 2, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:54:29.155 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj placed YELLOW piece at row 2, column 4
+2025-04-26 17:54:29.155 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj wins!
+2025-04-26 17:54:29.155 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj made successful move in column 4. New turn: 1
+2025-04-26 17:54:29.155 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][Y][ ][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][R][Y][ ][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][R][R][Y][R][ ]
+2025-04-26 17:54:29.156 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:54:29.157 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:29.158 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:29.158 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 17:54:31.579 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju wants to play again: true
+2025-04-26 17:54:32.106 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju wants to play again: true
+2025-04-26 17:54:33.656 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj wants to play again: true
+2025-04-26 17:54:33.657 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Resetting game session between uigju and jjj
+2025-04-26 17:54:33.658 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_START
+2025-04-26 17:54:33.658 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_START
+2025-04-26 17:54:33.659 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 17:54:33.659 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:54:33.659 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:54:33.659 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Started new game between uigju and jjj
+2025-04-26 17:59:08.499 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Move attempted by uigju in column 4. Current turn: 1, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 17:59:08.502 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju placed RED piece at row 5, column 4
+2025-04-26 17:59:08.502 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Player uigju made successful move in column 4. New turn: 2
+2025-04-26 17:59:08.502 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 17:59:08.502 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:59:08.502 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:59:08.503 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:59:08.503 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:59:08.503 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 17:59:08.503 [pool-2-thread-1] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][R][ ][ ]
+2025-04-26 17:59:08.504 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Sending board state with current turn: YELLOW
+2025-04-26 17:59:08.505 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 17:59:08.506 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 17:59:08.506 [pool-2-thread-1] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 2
+2025-04-26 18:00:05.503 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Move attempted by jjj in column 5. Current turn: 2, Player1(RED): uigju, Player2(YELLOW): jjj, isPlayersTurn: true
+2025-04-26 18:00:05.505 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj placed YELLOW piece at row 5, column 5
+2025-04-26 18:00:05.505 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj made successful move in column 5. New turn: 1
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - Current board state after move:
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 18:00:05.505 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][ ][ ][ ]
+2025-04-26 18:00:05.506 [pool-2-thread-2] DEBUG com.connectfour.server.GameSession - [ ][ ][ ][ ][R][Y][ ]
+2025-04-26 18:00:05.506 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Sending board state with current turn: RED
+2025-04-26 18:00:05.507 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: GAME_STATE_UPDATE
+2025-04-26 18:00:05.507 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to jjj: GAME_STATE_UPDATE
+2025-04-26 18:00:05.507 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Broadcasting game state with current turn: 1
+2025-04-26 18:00:07.579 [pool-2-thread-2] INFO  c.connectfour.server.ClientHandler - Client jjj requested disconnect: User closed application
+2025-04-26 18:00:07.584 [pool-2-thread-2] ERROR c.connectfour.server.ClientHandler - Error sending message to client: jjj
+java.net.SocketException: Broken pipe
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:62)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:394)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:410)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1809)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1303)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1248)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1444)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1195)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1616)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:362)
+	at com.connectfour.server.ClientHandler.sendMessage(ClientHandler.java:319)
+	at com.connectfour.server.ClientHandler.disconnect(ClientHandler.java:337)
+	at com.connectfour.server.ClientHandler.handleDisconnect(ClientHandler.java:265)
+	at com.connectfour.server.ClientHandler.handleMessage(ClientHandler.java:102)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:55)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-26 18:00:07.586 [pool-2-thread-2] INFO  c.connectfour.server.ClientHandler - Client disconnected: jjj
+2025-04-26 18:00:07.586 [pool-2-thread-2] INFO  com.connectfour.server.GameSession - Player jjj disconnected from game session
+2025-04-26 18:00:07.587 [pool-2-thread-2] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: PLAY_AGAIN_RESPONSE
+2025-04-26 18:00:07.587 [pool-2-thread-2] INFO  c.connectfour.server.ClientHandler - Client disconnected: jjj
+2025-04-26 18:00:07.588 [pool-2-thread-2] ERROR c.connectfour.server.ClientHandler - Error cleaning up client handler
+java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.ensureOpenAndConnected(NioSocketImpl.java:163)
+	at java.base/sun.nio.ch.NioSocketImpl.beginWrite(NioSocketImpl.java:362)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:407)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:440)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:819)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1231)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1218)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1900)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.flush(ObjectOutputStream.java:1845)
+	at java.base/java.io.ObjectOutputStream.flush(ObjectOutputStream.java:737)
+	at java.base/java.io.ObjectOutputStream.close(ObjectOutputStream.java:759)
+	at com.connectfour.server.ClientHandler.cleanup(ClientHandler.java:301)
+	at com.connectfour.server.ClientHandler.run(ClientHandler.java:71)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-26 18:00:11.596 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - Client uigju requested disconnect: User closed application
+2025-04-26 18:00:11.596 [pool-2-thread-1] DEBUG c.connectfour.server.ClientHandler - Sent message to uigju: DISCONNECT
+2025-04-26 18:00:11.597 [pool-2-thread-1] INFO  c.connectfour.server.ClientHandler - Client disconnected: uigju
