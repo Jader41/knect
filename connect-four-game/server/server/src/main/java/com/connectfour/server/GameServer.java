@@ -6,64 +6,81 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import com.connectfour.common.messages.Message;
 
 /**
  * The main server class that handles client connections and manages game sessions.
  */
 public class GameServer {
     private static final Logger logger = LoggerFactory.getLogger(GameServer.class);
-    private static final int THREAD_POOL_SIZE = 50;
+    private static GameServer instance;
     
     private final int port;
     private ServerSocket serverSocket;
     private boolean running;
-    private final ExecutorService threadPool;
+    private final List<ClientHandler> connectedClients;
+    private final List<ClientHandler> matchmakingQueue;
+    private final List<GameSession> activeSessions;
+    private final ExecutorService executorService;
+    private final Map<String, ClientHandler> usernameMap = new ConcurrentHashMap<>();
     
-    // Maps usernames to client handlers
-    private final Map<String, ClientHandler> connectedClients;
-    
-    // Set of usernames currently in use
-    private final Set<String> usernames;
-    
-    // Queue for matchmaking
-    private final MatchmakingQueue matchmakingQueue;
-    
+    /**
+     * Creates a new game server on the specified port.
+     * 
+     * @param port The port number to listen on
+     */
     public GameServer(int port) {
         this.port = port;
-        this.threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        this.connectedClients = new ConcurrentHashMap<>();
-        this.usernames = ConcurrentHashMap.newKeySet();
-        this.matchmakingQueue = new MatchmakingQueue(this);
+        this.connectedClients = Collections.synchronizedList(new ArrayList<>());
+        this.matchmakingQueue = Collections.synchronizedList(new ArrayList<>());
+        this.activeSessions = Collections.synchronizedList(new ArrayList<>());
+        this.executorService = Executors.newCachedThreadPool();
+        instance = this;
     }
     
     /**
-     * Starts the server.
+     * Returns the singleton instance of the game server.
+     * 
+     * @return The game server instance
+     */
+    public static GameServer getInstance() {
+        return instance;
+    }
+    
+    /**
+     * Starts the game server.
      */
     public void start() {
+        running = true;
+        
         try {
             serverSocket = new ServerSocket(port);
-            running = true;
             logger.info("Server started on port {}", port);
-            
-            // Start a separate thread for matchmaking
-            Thread matchmakingThread = new Thread(matchmakingQueue);
-            matchmakingThread.setDaemon(true);
-            matchmakingThread.start();
             
             // Accept client connections
             while (running) {
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    logger.info("New client connected: {}", clientSocket.getInetAddress());
+                    logger.info("New client connected: {}", clientSocket.getInetAddress().getHostAddress());
                     
-                    // Create a new client handler for this connection
+                    // Create a new client handler for the connection
                     ClientHandler clientHandler = new ClientHandler(clientSocket, this);
-                    threadPool.execute(clientHandler);
+                    connectedClients.add(clientHandler);
+                    
+                    // Notify of new client connection
+                    clientConnected(clientHandler);
+                    
+                    // Start a new thread for the client handler
+                    executorService.submit(clientHandler);
                 } catch (IOException e) {
                     if (running) {
                         logger.error("Error accepting client connection", e);
@@ -72,11 +89,13 @@ public class GameServer {
             }
         } catch (IOException e) {
             logger.error("Error starting server on port {}", port, e);
+        } finally {
+            shutdown();
         }
     }
     
     /**
-     * Stops the server.
+     * Stops the game server.
      */
     public void stop() {
         running = false;
@@ -88,73 +107,186 @@ public class GameServer {
         } catch (IOException e) {
             logger.error("Error closing server socket", e);
         }
-        
-        // Disconnect all clients
-        for (ClientHandler client : connectedClients.values()) {
-            client.disconnect("Server shutting down");
-        }
-        
-        // Shutdown thread pool
-        threadPool.shutdown();
-        logger.info("Server stopped");
     }
     
     /**
-     * Registers a client with the given username.
-     * 
-     * @param username The username to register
-     * @param clientHandler The client handler associated with this username
-     * @return true if the username was successfully registered, false if it's already in use
+     * Shuts down the game server and cleans up resources.
      */
-    public synchronized boolean registerUsername(String username, ClientHandler clientHandler) {
-        if (usernames.contains(username)) {
-            return false;
+    private void shutdown() {
+        try {
+            // Close all client connections
+            for (ClientHandler client : connectedClients) {
+                client.disconnect("Server shutting down");
+            }
+            
+            // Shutdown the executor service
+            executorService.shutdown();
+            if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
         }
         
-        usernames.add(username);
-        connectedClients.put(username, clientHandler);
-        logger.info("User registered: {}", username);
+        logger.info("Server shutdown complete");
+    }
+    
+    /**
+     * Registers a username for a client.
+     * 
+     * @param username The username to register
+     * @param client The client to register the username for
+     * @return true if the username was successfully registered, false otherwise
+     */
+    public boolean registerUsername(String username, ClientHandler client) {
+        if (usernameMap.containsKey(username)) {
+            return false;
+        }
+        usernameMap.put(username, client);
         return true;
     }
     
     /**
-     * Unregisters a client with the given username.
+     * Unregisters a username.
      * 
      * @param username The username to unregister
      */
-    public synchronized void unregisterUsername(String username) {
-        usernames.remove(username);
-        connectedClients.remove(username);
-        logger.info("User unregistered: {}", username);
-    }
-    
-    /**
-     * Adds a client to the matchmaking queue.
-     * 
-     * @param clientHandler The client handler to add to the queue
-     */
-    public void addToMatchmaking(ClientHandler clientHandler) {
-        matchmakingQueue.addToQueue(clientHandler);
-        logger.info("User added to matchmaking queue: {}", clientHandler.getUsername());
+    public void unregisterUsername(String username) {
+        usernameMap.remove(username);
     }
     
     /**
      * Removes a client from the matchmaking queue.
      * 
-     * @param clientHandler The client handler to remove from the queue
+     * @param client The client to remove
      */
-    public void removeFromMatchmaking(ClientHandler clientHandler) {
-        matchmakingQueue.removeFromQueue(clientHandler);
-        logger.info("User removed from matchmaking queue: {}", clientHandler.getUsername());
+    public void removeFromMatchmaking(ClientHandler client) {
+        matchmakingQueue.remove(client);
     }
     
     /**
-     * Gets a client handler by username.
+     * Removes a client from the connected clients list.
      * 
-     * @param username The username to look up
-     * @return The client handler for the given username, or null if not found
+     * @param client The client to remove
      */
-    public ClientHandler getClientHandler(String username) {
-        return connectedClients.get(username);
+    public void removeClient(ClientHandler client) {
+        connectedClients.remove(client);
+        matchmakingQueue.remove(client);
+        logger.info("Client removed: {}", client.getUsername());
+        clientDisconnected(client);
+    }
+    
+    /**
+     * Called when a client connects to the server.
+     * Can be overridden by subclasses to handle client connections.
+     * 
+     * @param client The client that connected
+     */
+    public void clientConnected(ClientHandler client) {
+        // Default implementation does nothing
+    }
+    
+    /**
+     * Called when a client disconnects from the server.
+     * Can be overridden by subclasses to handle client disconnections.
+     * 
+     * @param client The client that disconnected
+     */
+    public void clientDisconnected(ClientHandler client) {
+        // Default implementation does nothing
+    }
+    
+    /**
+     * Adds a client to the matchmaking queue.
+     * 
+     * @param client The client to add to matchmaking
+     */
+    public void addToMatchmaking(ClientHandler client) {
+        if (!matchmakingQueue.contains(client)) {
+            matchmakingQueue.add(client);
+            logger.info("Added client to matchmaking queue: {}", client.getUsername());
+            
+            // Check if we can start a new game
+            checkMatchmaking();
+        }
+    }
+    
+    /**
+     * Checks if there are enough players in the matchmaking queue to start a new game.
+     */
+    private synchronized void checkMatchmaking() {
+        if (matchmakingQueue.size() >= 2) {
+            // Get the first two players in the queue
+            ClientHandler player1 = matchmakingQueue.remove(0);
+            ClientHandler player2 = matchmakingQueue.remove(0);
+            
+            // Create a new game session
+            GameSession gameSession = new GameSession(player1, player2, this);
+            activeSessions.add(gameSession);
+            
+            logger.info("Created new game session between {} and {}", 
+                player1.getUsername(), player2.getUsername());
+        }
+    }
+    
+    /**
+     * Ends a game session.
+     * 
+     * @param session The game session to end
+     */
+    public void endGameSession(GameSession session) {
+        activeSessions.remove(session);
+        logger.info("Game session ended");
+    }
+    
+    /**
+     * Broadcasts a message to all connected clients.
+     * 
+     * @param message The message to broadcast
+     */
+    public void broadcastMessage(Message message) {
+        for (ClientHandler client : connectedClients) {
+            client.sendMessage(message);
+        }
+    }
+    
+    /**
+     * Returns a list of online users.
+     * 
+     * @return A list of usernames of connected clients
+     */
+    public List<String> getOnlineUsers() {
+        List<String> onlineUsers = new ArrayList<>();
+        
+        for (ClientHandler client : connectedClients) {
+            if (client.isConnected() && client.getUsername() != null) {
+                onlineUsers.add(client.getUsername());
+            }
+        }
+        
+        return onlineUsers;
+    }
+    
+    /**
+     * The main method to start the server.
+     * 
+     * @param args Command line arguments
+     */
+    public static void main(String[] args) {
+        int port = 8080; // Default port
+        
+        // Check if a port number was provided as a command line argument
+        if (args.length > 0) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                logger.warn("Invalid port number: {}. Using default port: {}", args[0], port);
+            }
+        }
+        
+        // Create and start the server
+        GameServer server = new GameServer(port);
+        server.start();
     }
 } 

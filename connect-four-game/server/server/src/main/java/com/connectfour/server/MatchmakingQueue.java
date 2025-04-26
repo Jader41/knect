@@ -76,7 +76,7 @@ public class MatchmakingQueue implements Runnable {
                 // Check if both clients are still connected
                 if (player1.isConnected() && player2.isConnected()) {
                     // Create a new game session
-                    GameSession gameSession = new GameSession(player1, player2);
+                    GameSession gameSession = new GameSession(player1, player2, server);
                     
                     // Start the game
                     gameSession.start();

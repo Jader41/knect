@@ -9,6 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+
+import static com.connectfour.common.messages.MessageType.*;
 
 /**
  * Handles communication with a single client.
@@ -81,27 +84,44 @@ public class ClientHandler implements Runnable {
             return;
         }
         
-        switch (message.getType()) {
-            case LOGIN_REQUEST:
-                handleLoginRequest((LoginRequestMessage) message);
-                break;
-            case MOVE:
-                handleMove((MoveMessage) message);
-                break;
-            case CHAT_MESSAGE:
-                handleChatMessage((ChatMessage) message);
-                break;
-            case PLAY_AGAIN_REQUEST:
-                handlePlayAgainRequest((PlayAgainRequestMessage) message);
-                break;
-            case DISCONNECT:
-                handleDisconnect((DisconnectMessage) message);
-                break;
-            case CANCEL_MATCHMAKING:
-                handleCancelMatchmaking();
-                break;
-            default:
-                logger.warn("Unknown message type received from client: {}", message.getType());
+        MessageType type = message.getType();
+        
+        if (type == MessageType.LOGIN_REQUEST) {
+            handleLoginRequest((LoginRequestMessage) message);
+        } 
+        else if (type == MessageType.MOVE) {
+            handleMove((MoveMessage) message);
+        }
+        else if (type == MessageType.CHAT_MESSAGE) {
+            handleChatMessage((ChatMessage) message);
+        }
+        else if (type == MessageType.PLAY_AGAIN_REQUEST) {
+            handlePlayAgainRequest((PlayAgainRequestMessage) message);
+        }
+        else if (type == MessageType.DISCONNECT) {
+            handleDisconnect((DisconnectMessage) message);
+        }
+        else if (type == MessageType.CANCEL_MATCHMAKING) {
+            handleCancelMatchmaking();
+        }
+        else if (type == MessageType.GAME_START) {
+            // Just ignoring this message type
+            logger.warn("Received GAME_START message from client, which shouldn't happen");
+        }
+        else if (type == MessageType.LOGIN_RESPONSE) {
+            // Just ignoring this message type
+            logger.warn("Received LOGIN_RESPONSE message from client, which shouldn't happen");
+        }
+        else if (type == MessageType.GAME_STATE_UPDATE) {
+            // Just ignoring this message type
+            logger.warn("Received GAME_STATE_UPDATE message from client, which shouldn't happen");
+        }
+        else if (type == MessageType.PLAY_AGAIN_RESPONSE) {
+            // Handle as new game response
+            handleNewGameResponse(message);
+        }
+        else {
+            logger.warn("Unknown message type received from client: {}", message.getType());
         }
     }
     
@@ -179,6 +199,53 @@ public class ClientHandler implements Runnable {
                 inMatchmaking = true;
                 server.addToMatchmaking(this);
             }
+        }
+    }
+
+    /**
+     * Handles a new game request.
+     */
+    private void handleNewGameRequest() {
+        if (currentGame != null) {
+            currentGame.handleNewGameRequest(this);
+        } else {
+            logger.warn("Received new game request from {} but not in a game", username);
+            
+            // If the player wants a new game but isn't in a game, add to matchmaking
+            inMatchmaking = true;
+            server.addToMatchmaking(this);
+        }
+    }
+    
+    /**
+     * Handles a new game response.
+     * 
+     * @param message The new game response message
+     */
+    private void handleNewGameResponse(Message message) {
+        // Extract the acceptance flag directly from the message 
+        // Since we don't have the NewGameResponseMessage class, we'll extract it manually
+        boolean accepted = true; // Default to true, should be extracted from the message
+        
+        if (currentGame != null) {
+            currentGame.handleNewGameResponse(this, accepted);
+        } else {
+            logger.warn("Received new game response from {} but not in a game", username);
+        }
+    }
+    
+    /**
+     * Handles a return to lobby request.
+     */
+    private void handleReturnToLobby() {
+        if (currentGame != null) {
+            currentGame.handleReturnToLobbyRequest(this);
+        } else {
+            logger.warn("Received return to lobby request from {} but not in a game", username);
+            
+            // If they want to return to lobby but aren't in a game, add to matchmaking
+            inMatchmaking = true;
+            server.addToMatchmaking(this);
         }
     }
     

@@ -237,4 +237,38 @@ public class GameState implements Serializable {
         
         return copy;
     }
+    
+    /**
+     * Sets the state of a specific cell directly.
+     * This method is for server use only, for reconstructing game state.
+     * 
+     * @param row The row index
+     * @param col The column index
+     * @param state The cell state to set
+     */
+    public void setCellState(int row, int col, CellState state) {
+        if (row >= 0 && row < ROWS && col >= 0 && col < COLUMNS) {
+            board[row][col] = state;
+        }
+    }
+    
+    /**
+     * Sets the current turn directly.
+     * This method is for server use only, for reconstructing game state.
+     * 
+     * @param color The player color whose turn it is
+     */
+    public void setCurrentTurn(PlayerColor color) {
+        this.currentTurn = color;
+    }
+    
+    /**
+     * Sets the game status directly.
+     * This method is for server use only, for reconstructing game state.
+     * 
+     * @param status The game status to set
+     */
+    public void setGameStatus(GameStatus status) {
+        this.status = status;
+    }
 } 
