@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-/**
- * Represents the state of a Connect Four game.
- */
+// 
+// Represents the state of a Connect Four game.
 public class GameState implements Serializable {
     private static final long serialVersionUID = 2L; // Updated version
     
@@ -67,12 +66,11 @@ public class GameState implements Serializable {
         return player2Username;
     }
     
-    /**
-     * Makes a move in the specified column.
-     * 
-     * @param column The column in which to drop the piece (0-based index)
-     * @return true if the move was successful, false otherwise
-     */
+    // 
+// Makes a move in the specified column.
+// 
+// @param column The column in which to drop the piece (0-based index)
+// @return true if the move was successful, false otherwise
     public boolean makeMove(int column) {
         System.out.println("makeMove called for column " + column + ", current turn: " + currentTurn);
         
@@ -217,11 +215,10 @@ public class GameState implements Serializable {
         return false;
     }
     
-    /**
-     * Creates a deep copy of the current game state.
-     * 
-     * @return A new GameState instance with the same data
-     */
+    // 
+// Creates a deep copy of the current game state.
+// 
+// @return A new GameState instance with the same data
     public GameState copy() {
         GameState copy = new GameState(this.player1Username, this.player2Username);
         
@@ -238,36 +235,33 @@ public class GameState implements Serializable {
         return copy;
     }
     
-    /**
-     * Sets the state of a specific cell directly.
-     * This method is for server use only, for reconstructing game state.
-     * 
-     * @param row The row index
-     * @param col The column index
-     * @param state The cell state to set
-     */
+    // 
+// Sets the state of a specific cell directly.
+// This method is for server use only, for reconstructing game state.
+// 
+// @param row The row index
+// @param col The column index
+// @param state The cell state to set
     public void setCellState(int row, int col, CellState state) {
         if (row >= 0 && row < ROWS && col >= 0 && col < COLUMNS) {
             board[row][col] = state;
         }
     }
     
-    /**
-     * Sets the current turn directly.
-     * This method is for server use only, for reconstructing game state.
-     * 
-     * @param color The player color whose turn it is
-     */
+    // 
+// Sets the current turn directly.
+// This method is for server use only, for reconstructing game state.
+// 
+// @param color The player color whose turn it is
     public void setCurrentTurn(PlayerColor color) {
         this.currentTurn = color;
     }
     
-    /**
-     * Sets the game status directly.
-     * This method is for server use only, for reconstructing game state.
-     * 
-     * @param status The game status to set
-     */
+    // 
+// Sets the game status directly.
+// This method is for server use only, for reconstructing game state.
+// 
+// @param status The game status to set
     public void setGameStatus(GameStatus status) {
         this.status = status;
     }

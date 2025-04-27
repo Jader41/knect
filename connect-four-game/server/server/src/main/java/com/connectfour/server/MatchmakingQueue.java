@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * Handles matchmaking between players.
- */
+// 
+// Handles matchmaking between players.
 public class MatchmakingQueue implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(MatchmakingQueue.class);
     private static final long MATCHMAKING_CHECK_INTERVAL = 1000; // 1 second
@@ -23,11 +22,10 @@ public class MatchmakingQueue implements Runnable {
         this.running = true;
     }
     
-    /**
-     * Adds a client to the matchmaking queue.
-     * 
-     * @param client The client handler to add
-     */
+    // 
+// Adds a client to the matchmaking queue.
+// 
+// @param client The client handler to add
     public void addToQueue(ClientHandler client) {
         if (!queue.contains(client)) {
             queue.add(client);
@@ -35,11 +33,10 @@ public class MatchmakingQueue implements Runnable {
         }
     }
     
-    /**
-     * Removes a client from the matchmaking queue.
-     * 
-     * @param client The client handler to remove
-     */
+    // 
+// Removes a client from the matchmaking queue.
+// 
+// @param client The client handler to remove
     public void removeFromQueue(ClientHandler client) {
         queue.remove(client);
         logger.info("Removed client from matchmaking queue: {}. Queue size: {}", client.getUsername(), queue.size());
@@ -64,9 +61,8 @@ public class MatchmakingQueue implements Runnable {
         logger.info("Matchmaking queue stopped");
     }
     
-    /**
-     * Attempts to match waiting players.
-     */
+    // 
+// Attempts to match waiting players.
     private void matchPlayers() {
         if (queue.size() >= 2) {
             logger.info("Attempting to match players. Current queue size: {}", queue.size());
@@ -102,9 +98,8 @@ public class MatchmakingQueue implements Runnable {
         }
     }
     
-    /**
-     * Stops the matchmaking queue.
-     */
+    // 
+// Stops the matchmaking queue.
     public void stop() {
         running = false;
     }

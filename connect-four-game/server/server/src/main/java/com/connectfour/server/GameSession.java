@@ -8,9 +8,8 @@ import com.connectfour.common.model.GameStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Represents a game session between two players.
- */
+// 
+// Represents a game session between two players.
 public class GameSession {
     private static final Logger logger = LoggerFactory.getLogger(GameSession.class);
     
@@ -26,13 +25,12 @@ public class GameSession {
     private boolean player1WantsNewGame;
     private boolean player2WantsNewGame;
     
-    /**
-     * Creates a new game session between two players.
-     * 
-     * @param player1 The first player
-     * @param player2 The second player
-     * @param server The game server
-     */
+    // 
+// Creates a new game session between two players.
+// 
+// @param player1 The first player
+// @param player2 The second player
+// @param server The game server
     public GameSession(ClientHandler player1, ClientHandler player2, GameServer server) {
         this.player1 = player1;
         this.player2 = player2;
@@ -71,9 +69,8 @@ public class GameSession {
         logger.info("Started new game session between {} and {}", player1.getUsername(), player2.getUsername());
     }
     
-    /**
-     * Starts the game session.
-     */
+    // 
+// Starts the game session.
     public void start() {
         logger.info("Starting game session between {} and {}", player1.getUsername(), player2.getUsername());
         
@@ -89,12 +86,11 @@ public class GameSession {
         player2.sendMessage(new GameStartMessage(initialState, PlayerColor.YELLOW, player1.getUsername()));
     }
     
-    /**
-     * Handles a move made by a player.
-     * 
-     * @param player The player making the move
-     * @param column The column where the player made the move
-     */
+    // 
+// Handles a move made by a player.
+// 
+// @param player The player making the move
+// @param column The column where the player made the move
     public synchronized void handleMove(ClientHandler player, int column) {
         // Check if it's the player's turn
         boolean isPlayer1Turn = currentPlayer == 1;
@@ -133,31 +129,28 @@ public class GameSession {
         }
     }
     
-    /**
-     * Broadcasts the current game state to both players.
-     */
+    // 
+// Broadcasts the current game state to both players.
     private void broadcastGameState() {
         sendBoardState();
         logger.info("Broadcasting game state with current turn: {}", currentPlayer);
     }
     
-    /**
-     * Broadcasts a chat message to both players.
-     * 
-     * @param message The chat message to broadcast
-     */
+    // 
+// Broadcasts a chat message to both players.
+// 
+// @param message The chat message to broadcast
     public void broadcastChat(ChatMessage message) {
         player1.sendMessage(message);
         player2.sendMessage(message);
         logger.info("Chat message from {}: {}", message.getSender(), message.getContent());
     }
     
-    /**
-     * Handles a player's request to play again.
-     * 
-     * @param player The player making the request
-     * @param wantsToPlayAgain Whether the player wants to play again
-     */
+    // 
+// Handles a player's request to play again.
+// 
+// @param player The player making the request
+// @param wantsToPlayAgain Whether the player wants to play again
     public synchronized void handlePlayAgainRequest(ClientHandler player, boolean wantsToPlayAgain) {
         if (player == player1) {
             player1WantsPlayAgain = wantsToPlayAgain;
@@ -187,11 +180,10 @@ public class GameSession {
         }
     }
     
-    /**
-     * Handles a player's request to start a new game.
-     * 
-     * @param player The player making the request
-     */
+    // 
+// Handles a player's request to start a new game.
+// 
+// @param player The player making the request
     public void handleNewGameRequest(ClientHandler player) {
         if (!gameOver) {
             // Can't request a new game while the current game is in progress
@@ -221,12 +213,11 @@ public class GameSession {
         }
     }
     
-    /**
-     * Handles a player's response to a new game request.
-     * 
-     * @param player The player responding to the request
-     * @param accepted Whether the player accepted the request
-     */
+    // 
+// Handles a player's response to a new game request.
+// 
+// @param player The player responding to the request
+// @param accepted Whether the player accepted the request
     public void handleNewGameResponse(ClientHandler player, boolean accepted) {
         if (!gameOver) {
             // Can't respond to a new game request while the current game is in progress
@@ -261,11 +252,10 @@ public class GameSession {
         }
     }
     
-    /**
-     * Handles a player's request to return to the lobby.
-     * 
-     * @param player The player requesting to return to the lobby
-     */
+    // 
+// Handles a player's request to return to the lobby.
+// 
+// @param player The player requesting to return to the lobby
     public void handleReturnToLobbyRequest(ClientHandler player) {
         ClientHandler otherPlayer = (player == player1) ? player2 : player1;
         
@@ -292,11 +282,10 @@ public class GameSession {
                 player.getUsername(), otherPlayer.getUsername());
     }
     
-    /**
-     * Handles a player disconnecting from the game.
-     * 
-     * @param player The player who disconnected
-     */
+    // 
+// Handles a player disconnecting from the game.
+// 
+// @param player The player who disconnected
     public void handlePlayerDisconnect(ClientHandler player) {
         logger.info("Player {} disconnected from game session", player.getUsername());
         
@@ -310,9 +299,8 @@ public class GameSession {
         }
     }
     
-    /**
-     * Resets the game for a rematch.
-     */
+    // 
+// Resets the game for a rematch.
     private void resetGame() {
         logger.info("Resetting game session between {} and {}", player1.getUsername(), player2.getUsername());
         
@@ -344,12 +332,11 @@ public class GameSession {
         logger.info("Started new game between {} and {}", player1.getUsername(), player2.getUsername());
     }
     
-    /**
-     * Makes a move for the current player.
-     * 
-     * @param column The column to place the piece in
-     * @return true if the move was successful, false otherwise
-     */
+    // 
+// Makes a move for the current player.
+// 
+// @param column The column to place the piece in
+// @return true if the move was successful, false otherwise
     private boolean makeMove(int column) {
         // Check if the column is valid
         if (column < 0 || column >= 7) {
@@ -390,13 +377,12 @@ public class GameSession {
         return true;
     }
     
-    /**
-     * Checks if the last move resulted in a win.
-     * 
-     * @param row The row of the last move
-     * @param column The column of the last move
-     * @return true if the move resulted in a win, false otherwise
-     */
+    // 
+// Checks if the last move resulted in a win.
+// 
+// @param row The row of the last move
+// @param column The column of the last move
+// @return true if the move resulted in a win, false otherwise
     private boolean checkForWin(int row, int column) {
         char piece = board[row][column];
         
@@ -451,9 +437,8 @@ public class GameSession {
         return false;
     }
 
-    /**
-     * Sends the current board state to both players.
-     */
+    // 
+// Sends the current board state to both players.
     private void sendBoardState() {
         // Create a new GameState
         GameState gameState = new GameState(player1.getUsername(), player2.getUsername());

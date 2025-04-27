@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent from client to server when a player wants to play again.
- */
+// 
+// Message sent from client to server when a player wants to play again.
 public class PlayAgainRequestMessage extends Message {
     private static final long serialVersionUID = 1L;
     

@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent from client to server when a player makes a move.
- */
+// 
+// Message sent from client to server when a player makes a move.
 public class MoveMessage extends Message {
     private static final long serialVersionUID = 1L;
     

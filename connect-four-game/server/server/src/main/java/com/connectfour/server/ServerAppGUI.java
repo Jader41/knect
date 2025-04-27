@@ -22,9 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * JavaFX GUI application for the Connect Four server.
- */
+// 
+// JavaFX GUI application for the Connect Four server.
 public class ServerAppGUI extends Application {
     private static final Logger logger = LoggerFactory.getLogger(ServerAppGUI.class);
     private static final int DEFAULT_PORT = 8080;

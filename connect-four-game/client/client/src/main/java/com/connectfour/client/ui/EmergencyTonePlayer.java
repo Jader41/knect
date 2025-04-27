@@ -2,19 +2,17 @@ package com.connectfour.client.ui;
 
 import javax.sound.sampled.*;
 
-/**
- * A simple tone generator that creates audio directly.
- * Use this as a fallback when other audio methods fail.
- */
+// 
+// A simple tone generator that creates audio directly.
+// Use this as a fallback when other audio methods fail.
 public class EmergencyTonePlayer {
     
     private boolean isPlaying = false;
     private Thread audioThread;
     private final Object lock = new Object();
     
-    /**
-     * Start playing a continuous background tone
-     */
+    // 
+// Start playing a continuous background tone
     public void start() {
         if (isPlaying) {
             return;
@@ -41,9 +39,8 @@ public class EmergencyTonePlayer {
         }
     }
     
-    /**
-     * Stop playing the tone
-     */
+    // 
+// Stop playing the tone
     public void stop() {
         synchronized (lock) {
             isPlaying = false;
@@ -54,9 +51,8 @@ public class EmergencyTonePlayer {
         }
     }
     
-    /**
-     * Generate and play a continuous tone
-     */
+    // 
+// Generate and play a continuous tone
     private void playTone() {
         // Audio format parameters
         float sampleRate = 44100.0f;
@@ -91,9 +87,9 @@ public class EmergencyTonePlayer {
                     // Mix three frequencies with different volumes
                     for (int i = 0; i < bufferSize; i += 2) {
                         // Calculate sample (3 superimposed sine waves)
-                        double sample = Math.sin(angle1) * 0.03 + // C note (very quiet)
-                                      Math.sin(angle2) * 0.02 + // E note (quieter)
-                                      Math.sin(angle3) * 0.01;  // G note (quietest)
+                        double sample = Math.sin(angle1) * 0.15 + // C note (louder)
+                                      Math.sin(angle2) * 0.10 + // E note
+                                      Math.sin(angle3) * 0.05;  // G note
                         
                         // Scale to 16-bit range and convert to bytes
                         short val = (short) (sample * 32767);

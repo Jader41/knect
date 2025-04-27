@@ -17,9 +17,8 @@ public GameScreen(Stage stage, GameClient gameClient) {
     this.backgroundMusic = new AudioPlayer("somber_background.mp3");
 }
 
-/**
- * Constructor for AI game.
- */
+// 
+// Constructor for AI game.
 public GameScreen(Stage stage, GameClient gameClient, GameState gameState, PlayerColor playerColor, String aiDifficulty) {
     this.stage = stage;
     this.gameClient = gameClient;
@@ -40,9 +39,8 @@ public GameScreen(Stage stage, GameClient gameClient, GameState gameState, Playe
     this.backgroundMusic = new AudioPlayer("somber_background.mp3");
 }
 
-/**
- * Constructor for AI game with username and difficulty.
- */
+// 
+// Constructor for AI game with username and difficulty.
 public GameScreen(Stage stage, GameClient gameClient, String username, String opponentLabel, String aiDifficulty) {
     this.stage = stage;
     this.gameClient = gameClient;

@@ -3,9 +3,8 @@ package com.connectfour.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Main entry point for the Connect Four server application.
- */
+// 
+// Main entry point for the Connect Four server application.
 public class ServerApp {
     private static final Logger logger = LoggerFactory.getLogger(ServerApp.class);
     private static final int DEFAULT_PORT = 8080;

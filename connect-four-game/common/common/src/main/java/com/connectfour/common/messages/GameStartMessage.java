@@ -3,9 +3,8 @@ package com.connectfour.common.messages;
 import com.connectfour.common.model.GameState;
 import com.connectfour.common.model.PlayerColor;
 
-/**
- * Message sent from server to client to notify them that a game is starting.
- */
+// 
+// Message sent from server to client to notify them that a game is starting.
 public class GameStartMessage extends Message {
     private static final long serialVersionUID = 1L;
     

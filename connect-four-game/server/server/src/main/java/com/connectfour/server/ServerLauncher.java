@@ -13,20 +13,18 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Main entry point for the Connect Four server application.
- * This launcher allows the server to be started as a standalone application.
- */
+// 
+// Main entry point for the Connect Four server application.
+// This launcher allows the server to be started as a standalone application.
 public class ServerLauncher extends Application {
     
     private TextArea logArea;
     private GameServer server;
     
-    /**
-     * Main method to launch the server GUI application.
-     * 
-     * @param args Command line arguments (unused)
-     */
+    // 
+// Main method to launch the server GUI application.
+// 
+// @param args Command line arguments (unused)
     public static void main(String[] args) {
         launch(args);
     }

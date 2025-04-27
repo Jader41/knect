@@ -9,9 +9,8 @@ import java.net.URL;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-/**
- * Handles audio playback for the Connect Four game using Java Sound API.
- */
+// 
+// Handles audio playback for the Connect Four game using Java Sound API.
 public class AudioPlayer {
     private Clip clip;
     private MediaPlayer mediaPlayer;
@@ -25,9 +24,8 @@ public class AudioPlayer {
         printAudioSystemInfo();
     }
     
-    /**
-     * Prints information about the audio system to help with debugging.
-     */
+    // 
+// Prints information about the audio system to help with debugging.
     private static void printAudioSystemInfo() {
         try {
             System.out.println("---- Audio System Information ----");
@@ -67,11 +65,10 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Initializes the audio player with the specified sound file.
-     * 
-     * @param soundFileName The name of the sound file in the resources directory
-     */
+    // 
+// Initializes the audio player with the specified sound file.
+// 
+// @param soundFileName The name of the sound file in the resources directory
     public AudioPlayer(String soundFileName) {
         try {
             System.out.println("Attempting to load sound file: " + soundFileName);
@@ -102,9 +99,8 @@ public class AudioPlayer {
         }
     }
     
-    /**
-     * Load sound from various sources, trying different approaches
-     */
+    // 
+// Load sound from various sources, trying different approaches
     private boolean loadSound(String soundFileName) {
         // First try loading as a media file (better for MP3)
         if (soundFileName.toLowerCase().endsWith(".mp3")) {
@@ -115,9 +111,8 @@ public class AudioPlayer {
         }
     }
     
-    /**
-     * Loads MP3 files using Media API
-     */
+    // 
+// Loads MP3 files using Media API
     private boolean loadMediaFile(String soundFileName) {
         try {
             // Try several methods to find the audio file
@@ -201,9 +196,8 @@ public class AudioPlayer {
         }
     }
     
-    /**
-     * Loads WAV files using the Clip API
-     */
+    // 
+// Loads WAV files using the Clip API
     private boolean loadClip(String soundFileName) {
         try {
             // Try to get the resource URL
@@ -294,9 +288,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Starts playing the background music.
-     */
+    // 
+// Starts playing the background music.
     public void play() {
         if (clip != null && !isPlaying) {
             System.out.println("Starting playback of: " + currentFile);
@@ -310,12 +303,34 @@ public class AudioPlayer {
             
             System.out.println("Playback started successfully");
         } else if (mediaPlayer != null && !isPlaying) {
+            // Ensure we have fresh listeners each time play() is invoked
+            mediaPlayer.setOnError(() -> {
+                System.err.println("Media player error: " + mediaPlayer.getError());
+
+                // Attempt graceful fallback so the user still hears something
+                if (!isPlaying) {
+                    System.out.println("Falling back to emergency tone generator due to media error");
+                    emergencyPlayer.start();
+                    isPlaying = true;
+                }
+            });
+
+            // When playback actually starts, update flag
+            mediaPlayer.setOnPlaying(() -> {
+                System.out.println("MediaPlayer reports PLAYING – audio should now be audible");
+                isPlaying = true;
+            });
+
+            // Loop media indefinitely (this is normally handled via cycle count, but add handler for safety)
+            mediaPlayer.setOnEndOfMedia(() -> {
+                mediaPlayer.seek(javafx.util.Duration.ZERO);
+                mediaPlayer.play();
+            });
+
             System.out.println("Setting volume to " + volume);
             mediaPlayer.setVolume(volume);
-            
             System.out.println("Starting background music playback");
             mediaPlayer.play();
-            isPlaying = true;
         } else {
             System.out.println("Cannot play sound: " + 
                               (clip != null ? "clip=initialized" : "clip=null") + ", " +
@@ -331,9 +346,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Stops the background music.
-     */
+    // 
+// Stops the background music.
     public void stop() {
         if (clip != null && isPlaying) {
             System.out.println("Stopping playback");
@@ -352,9 +366,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Pauses the background music.
-     */
+    // 
+// Pauses the background music.
     public void pause() {
         if (clip != null && isPlaying) {
             System.out.println("Pausing playback");
@@ -373,11 +386,10 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Sets the volume of the audio player.
-     * 
-     * @param volume Volume level between 0.0 and 10.0
-     */
+    // 
+// Sets the volume of the audio player.
+// 
+// @param volume Volume level between 0.0 and 10.0
     public void setVolume(double volumeLevel) {
         this.volume = (float)volumeLevel;
         
@@ -420,18 +432,16 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Checks if the audio is currently playing.
-     * 
-     * @return True if audio is playing, false otherwise
-     */
+    // 
+// Checks if the audio is currently playing.
+// 
+// @return True if audio is playing, false otherwise
     public boolean isPlaying() {
         return isPlaying;
     }
 
-    /**
-     * Releases resources used by the audio player.
-     */
+    // 
+// Releases resources used by the audio player.
     public void dispose() {
         if (clip != null) {
             System.out.println("Disposing audio resources");

@@ -13,9 +13,8 @@ import java.util.ArrayList;
 
 import static com.connectfour.common.messages.MessageType.*;
 
-/**
- * Handles communication with a single client.
- */
+// 
+// Handles communication with a single client.
 public class ClientHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
     
@@ -72,11 +71,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a message from the client.
-     * 
-     * @param message The message to handle
-     */
+    // 
+// Handles a message from the client.
+// 
+// @param message The message to handle
     private void handleMessage(Message message) {
         if (!authenticated && !(message instanceof LoginRequestMessage)) {
             // Client must authenticate first
@@ -128,11 +126,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a login request message.
-     * 
-     * @param message The login request message
-     */
+    // 
+// Handles a login request message.
+// 
+// @param message The login request message
     private void handleLoginRequest(LoginRequestMessage message) {
         String requestedUsername = message.getUsername().trim();
         
@@ -160,11 +157,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a move message.
-     * 
-     * @param message The move message
-     */
+    // 
+// Handles a move message.
+// 
+// @param message The move message
     private void handleMove(MoveMessage message) {
         if (currentGame != null) {
             currentGame.handleMove(this, message.getColumn());
@@ -173,11 +169,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a chat message.
-     * 
-     * @param message The chat message
-     */
+    // 
+// Handles a chat message.
+// 
+// @param message The chat message
     private void handleChatMessage(ChatMessage message) {
         if (currentGame != null) {
             currentGame.broadcastChat(message);
@@ -186,11 +181,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a play again request.
-     * 
-     * @param message The play again request message
-     */
+    // 
+// Handles a play again request.
+// 
+// @param message The play again request message
     private void handlePlayAgainRequest(PlayAgainRequestMessage message) {
         if (currentGame != null) {
             currentGame.handlePlayAgainRequest(this, message.wantsToPlayAgain());
@@ -206,9 +200,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    /**
-     * Handles a new game request.
-     */
+    // 
+// Handles a new game request.
     private void handleNewGameRequest() {
         if (currentGame != null) {
             currentGame.handleNewGameRequest(this);
@@ -221,11 +214,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a new game response.
-     * 
-     * @param message The new game response message
-     */
+    // 
+// Handles a new game response.
+// 
+// @param message The new game response message
     private void handleNewGameResponse(Message message) {
         // Extract the acceptance flag directly from the message 
         // Since we don't have the NewGameResponseMessage class, we'll extract it manually
@@ -238,9 +230,8 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Handles a return to lobby request.
-     */
+    // 
+// Handles a return to lobby request.
     private void handleReturnToLobby() {
         if (currentGame != null) {
             currentGame.handleReturnToLobbyRequest(this);
@@ -255,19 +246,17 @@ public class ClientHandler implements Runnable {
         logger.info("Player {} returned to lobby and added to matchmaking queue", username);
     }
     
-    /**
-     * Handles a disconnect message.
-     * 
-     * @param message The disconnect message
-     */
+    // 
+// Handles a disconnect message.
+// 
+// @param message The disconnect message
     private void handleDisconnect(DisconnectMessage message) {
         logger.info("Client {} requested disconnect: {}", username, message.getReason());
         disconnect(message.getReason());
     }
     
-    /**
-     * Handles a client disconnect.
-     */
+    // 
+// Handles a client disconnect.
     private void handleDisconnect() {
         logger.info("Client disconnected: {}", username);
         
@@ -289,9 +278,8 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Cleans up resources.
-     */
+    // 
+// Cleans up resources.
     private void cleanup() {
         try {
             if (inputStream != null) {
@@ -308,11 +296,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Sends a message to the client.
-     * 
-     * @param message The message to send
-     */
+    // 
+// Sends a message to the client.
+// 
+// @param message The message to send
     public synchronized void sendMessage(Message message) {
         if (connected && outputStream != null) {
             try {
@@ -327,11 +314,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Disconnects the client with a reason.
-     * 
-     * @param reason The reason for disconnection
-     */
+    // 
+// Disconnects the client with a reason.
+// 
+// @param reason The reason for disconnection
     public void disconnect(String reason) {
         if (connected) {
             sendMessage(new DisconnectMessage(reason));
@@ -340,44 +326,39 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    /**
-     * Checks if the client is connected.
-     * 
-     * @return true if the client is connected, false otherwise
-     */
+    // 
+// Checks if the client is connected.
+// 
+// @return true if the client is connected, false otherwise
     public boolean isConnected() {
         return connected;
     }
     
-    /**
-     * Gets the username of the client.
-     * 
-     * @return The username
-     */
+    // 
+// Gets the username of the client.
+// 
+// @return The username
     public String getUsername() {
         return username;
     }
     
-    /**
-     * Sets the current game session for this client.
-     * 
-     * @param gameSession The game session
-     */
+    // 
+// Sets the current game session for this client.
+// 
+// @param gameSession The game session
     public void setCurrentGame(GameSession gameSession) {
         this.currentGame = gameSession;
         this.inMatchmaking = false;
     }
     
-    /**
-     * Clears the current game session.
-     */
+    // 
+// Clears the current game session.
     public void clearCurrentGame() {
         this.currentGame = null;
     }
     
-    /**
-     * Handles a cancel matchmaking message.
-     */
+    // 
+// Handles a cancel matchmaking message.
     private void handleCancelMatchmaking() {
         // Remove the client from the matchmaking queue
         server.removeFromMatchmaking(this);

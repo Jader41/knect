@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent from client to server to request login with a username.
- */
+// 
+// Message sent from client to server to request login with a username.
 public class LoginRequestMessage extends Message {
     private static final long serialVersionUID = 1L;
     

@@ -17,9 +17,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import com.connectfour.common.messages.Message;
 
-/**
- * The main server class that handles client connections and manages game sessions.
- */
+// 
+// The main server class that handles client connections and manages game sessions.
 public class GameServer {
     private static final Logger logger = LoggerFactory.getLogger(GameServer.class);
     private static GameServer instance;
@@ -33,11 +32,10 @@ public class GameServer {
     private final ExecutorService executorService;
     private final Map<String, ClientHandler> usernameMap = new ConcurrentHashMap<>();
     
-    /**
-     * Creates a new game server on the specified port.
-     * 
-     * @param port The port number to listen on
-     */
+    // 
+// Creates a new game server on the specified port.
+// 
+// @param port The port number to listen on
     public GameServer(int port) {
         this.port = port;
         this.connectedClients = Collections.synchronizedList(new ArrayList<>());
@@ -53,18 +51,16 @@ public class GameServer {
         instance = this;
     }
     
-    /**
-     * Returns the singleton instance of the game server.
-     * 
-     * @return The game server instance
-     */
+    // 
+// Returns the singleton instance of the game server.
+// 
+// @return The game server instance
     public static GameServer getInstance() {
         return instance;
     }
     
-    /**
-     * Starts the game server.
-     */
+    // 
+// Starts the game server.
     public void start() {
         running = true;
         
@@ -100,9 +96,8 @@ public class GameServer {
         }
     }
     
-    /**
-     * Stops the game server.
-     */
+    // 
+// Stops the game server.
     public void stop() {
         running = false;
         
@@ -115,9 +110,8 @@ public class GameServer {
         }
     }
     
-    /**
-     * Shuts down the game server and cleans up resources.
-     */
+    // 
+// Shuts down the game server and cleans up resources.
     private void shutdown() {
         try {
             // Close all client connections
@@ -138,13 +132,12 @@ public class GameServer {
         logger.info("Server shutdown complete");
     }
     
-    /**
-     * Registers a username for a client.
-     * 
-     * @param username The username to register
-     * @param client The client to register the username for
-     * @return true if the username was successfully registered, false otherwise
-     */
+    // 
+// Registers a username for a client.
+// 
+// @param username The username to register
+// @param client The client to register the username for
+// @return true if the username was successfully registered, false otherwise
     public boolean registerUsername(String username, ClientHandler client) {
         if (usernameMap.containsKey(username)) {
             return false;
@@ -153,29 +146,26 @@ public class GameServer {
         return true;
     }
     
-    /**
-     * Unregisters a username.
-     * 
-     * @param username The username to unregister
-     */
+    // 
+// Unregisters a username.
+// 
+// @param username The username to unregister
     public void unregisterUsername(String username) {
         usernameMap.remove(username);
     }
     
-    /**
-     * Removes a client from the matchmaking queue.
-     * 
-     * @param client The client to remove
-     */
+    // 
+// Removes a client from the matchmaking queue.
+// 
+// @param client The client to remove
     public void removeFromMatchmaking(ClientHandler client) {
         matchmakingQueue.removeFromQueue(client);
     }
     
-    /**
-     * Removes a client from the connected clients list.
-     * 
-     * @param client The client to remove
-     */
+    // 
+// Removes a client from the connected clients list.
+// 
+// @param client The client to remove
     public void removeClient(ClientHandler client) {
         connectedClients.remove(client);
         matchmakingQueue.removeFromQueue(client);
@@ -183,61 +173,55 @@ public class GameServer {
         clientDisconnected(client);
     }
     
-    /**
-     * Called when a client connects to the server.
-     * Can be overridden by subclasses to handle client connections.
-     * 
-     * @param client The client that connected
-     */
+    // 
+// Called when a client connects to the server.
+// Can be overridden by subclasses to handle client connections.
+// 
+// @param client The client that connected
     public void clientConnected(ClientHandler client) {
         // Default implementation does nothing
     }
     
-    /**
-     * Called when a client disconnects from the server.
-     * Can be overridden by subclasses to handle client disconnections.
-     * 
-     * @param client The client that disconnected
-     */
+    // 
+// Called when a client disconnects from the server.
+// Can be overridden by subclasses to handle client disconnections.
+// 
+// @param client The client that disconnected
     public void clientDisconnected(ClientHandler client) {
         // Default implementation does nothing
     }
     
-    /**
-     * Adds a client to the matchmaking queue.
-     * 
-     * @param client The client to add to matchmaking
-     */
+    // 
+// Adds a client to the matchmaking queue.
+// 
+// @param client The client to add to matchmaking
     public void addToMatchmaking(ClientHandler client) {
         matchmakingQueue.addToQueue(client);
     }
     
-    /**
-     * Ends a game session.
-     * 
-     * @param session The game session to end
-     */
+    // 
+// Ends a game session.
+// 
+// @param session The game session to end
     public void endGameSession(GameSession session) {
         activeSessions.remove(session);
         logger.info("Game session ended");
     }
     
-    /**
-     * Broadcasts a message to all connected clients.
-     * 
-     * @param message The message to broadcast
-     */
+    // 
+// Broadcasts a message to all connected clients.
+// 
+// @param message The message to broadcast
     public void broadcastMessage(Message message) {
         for (ClientHandler client : connectedClients) {
             client.sendMessage(message);
         }
     }
     
-    /**
-     * Returns a list of online users.
-     * 
-     * @return A list of usernames of connected clients
-     */
+    // 
+// Returns a list of online users.
+// 
+// @return A list of usernames of connected clients
     public List<String> getOnlineUsers() {
         List<String> onlineUsers = new ArrayList<>();
         
@@ -250,11 +234,10 @@ public class GameServer {
         return onlineUsers;
     }
     
-    /**
-     * The main method to start the server.
-     * 
-     * @param args Command line arguments
-     */
+    // 
+// The main method to start the server.
+// 
+// @param args Command line arguments
     public static void main(String[] args) {
         int port = 8080; // Default port
         

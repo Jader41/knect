@@ -6,20 +6,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Handles audio playback for the Connect Four game using Java Sound API.
- */
+// 
+// Handles audio playback for the Connect Four game using Java Sound API.
 public class AudioPlayer {
     private Clip clip;
     private boolean isPlaying = false;
     private String currentFile = null;
     private float volume = 1.0f;
 
-    /**
-     * Initializes the audio player with the specified sound file.
-     * 
-     * @param soundFileName The name of the sound file in the resources directory
-     */
+    // 
+// Initializes the audio player with the specified sound file.
+// 
+// @param soundFileName The name of the sound file in the resources directory
     public AudioPlayer(String soundFileName) {
         try {
             System.out.println("Attempting to load sound file with Java Sound API: " + soundFileName);
@@ -82,9 +80,8 @@ public class AudioPlayer {
         }
     }
     
-    /**
-     * Try loading from resources.
-     */
+    // 
+// Try loading from resources.
     private boolean tryLoadFromResources(String soundFileName) {
         try {
             // Get resource as stream
@@ -142,9 +139,8 @@ public class AudioPlayer {
         }
     }
     
-    /**
-     * Try loading from filesystem.
-     */
+    // 
+// Try loading from filesystem.
     private boolean tryLoadFromFilesystem(String soundFileName) {
         try {
             // Try using absolute path as fallback
@@ -194,9 +190,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Starts playing the background music.
-     */
+    // 
+// Starts playing the background music.
     public void play() {
         if (clip != null && !isPlaying) {
             System.out.println("Starting playback of: " + currentFile);
@@ -213,9 +208,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Stops the background music.
-     */
+    // 
+// Stops the background music.
     public void stop() {
         if (clip != null && isPlaying) {
             System.out.println("Stopping playback");
@@ -224,9 +218,8 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Pauses the background music.
-     */
+    // 
+// Pauses the background music.
     public void pause() {
         if (clip != null && isPlaying) {
             System.out.println("Pausing playback");
@@ -235,11 +228,10 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Sets the volume of the audio player.
-     * 
-     * @param volume Volume level between 0.0 and 1.0
-     */
+    // 
+// Sets the volume of the audio player.
+// 
+// @param volume Volume level between 0.0 and 1.0
     public void setVolume(double volumeLevel) {
         if (clip != null) {
             try {
@@ -270,18 +262,16 @@ public class AudioPlayer {
         }
     }
 
-    /**
-     * Checks if the audio is currently playing.
-     * 
-     * @return True if audio is playing, false otherwise
-     */
+    // 
+// Checks if the audio is currently playing.
+// 
+// @return True if audio is playing, false otherwise
     public boolean isPlaying() {
         return isPlaying;
     }
 
-    /**
-     * Releases resources used by the audio player.
-     */
+    // 
+// Releases resources used by the audio player.
     public void dispose() {
         if (clip != null) {
             System.out.println("Disposing audio resources");

@@ -2,9 +2,8 @@ package com.connectfour.common.messages;
 
 import com.connectfour.common.model.GameState;
 
-/**
- * Message sent from server to client to update the game state.
- */
+// 
+// Message sent from server to client to update the game state.
 public class GameStateUpdateMessage extends Message {
     private static final long serialVersionUID = 2L;
     

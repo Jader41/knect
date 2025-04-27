@@ -16,9 +16,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * Screen shown while waiting for an opponent to join the game.
- */
+// 
+// Screen shown while waiting for an opponent to join the game.
 public class WaitingScreen implements GameClient.ConnectionListener, GameClient.GameStateListener {
     private final Stage stage;
     private final GameClient gameClient;
@@ -35,9 +34,8 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         gameClient.addGameStateListener(this);
     }
     
-    /**
-     * Shows the waiting screen.
-     */
+    // 
+// Shows the waiting screen.
     public void show() {
         // Create UI components
         Label titleLabel = new Label("Connect Four");
@@ -82,9 +80,8 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         startWaitingAnimation();
     }
     
-    /**
-     * Shows the AI difficulty selection screen.
-     */
+    // 
+// Shows the AI difficulty selection screen.
     private void showAIDifficultySelection() {
         // Remove from matchmaking queue if we're in it
         gameClient.cancelMatchmaking();
@@ -129,11 +126,10 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         stage.setScene(scene);
     }
     
-    /**
-     * Starts a game against the AI with the specified difficulty.
-     * 
-     * @param difficulty The AI difficulty level
-     */
+    // 
+// Starts a game against the AI with the specified difficulty.
+// 
+// @param difficulty The AI difficulty level
     private void startAIGame(String difficulty) {
         // Remove from matchmaking queue if we're in it
         gameClient.cancelMatchmaking();
@@ -150,9 +146,8 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         gameScreen.show();
     }
     
-    /**
-     * Starts the waiting animation (dots).
-     */
+    // 
+// Starts the waiting animation (dots).
     private void startWaitingAnimation() {
         waitingAnimation = new Timeline(
             new KeyFrame(Duration.seconds(0.5), e -> {
@@ -168,9 +163,8 @@ public class WaitingScreen implements GameClient.ConnectionListener, GameClient.
         waitingAnimation.play();
     }
     
-    /**
-     * Stops the waiting animation.
-     */
+    // 
+// Stops the waiting animation.
     private void stopWaitingAnimation() {
         if (waitingAnimation != null) {
             waitingAnimation.stop();

@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent from server to client in response to a login request.
- */
+// 
+// Message sent from server to client in response to a login request.
 public class LoginResponseMessage extends Message {
     private static final long serialVersionUID = 1L;
     

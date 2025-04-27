@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent to notify about a disconnect.
- */
+// 
+// Message sent to notify about a disconnect.
 public class DisconnectMessage extends Message {
     private static final long serialVersionUID = 1L;
     

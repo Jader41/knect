@@ -20,9 +20,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-/**
- * The main game screen where the Connect Four game is played.
- */
+// 
+// The main game screen where the Connect Four game is played.
 public class GameScreen implements GameClient.GameStateListener, GameClient.ConnectionListener, GameClient.ChatMessageListener {
     private final Stage stage;
     private final GameClient gameClient;
@@ -40,6 +39,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
     private GameState gameState;
     private PlayerColor playerColor;
     private String opponentUsername;
+    private String playerUsername;
     
     // AI player
     private AIPlayer aiPlayer;
@@ -71,20 +71,21 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.gameState = gameClient.getCurrentGameState();
         this.playerColor = gameClient.getAssignedColor();
         this.opponentUsername = gameClient.getOpponentUsername();
+        this.playerUsername = gameClient.getUsername();
         
         // Initialize background music
         this.backgroundMusic = new AudioPlayer("somber_background.mp3");
     }
     
-    /**
-     * Constructor for AI game.
-     */
+    // 
+// Constructor for AI game.
     public GameScreen(Stage stage, GameClient gameClient, GameState gameState, PlayerColor playerColor, String aiDifficulty) {
         this.stage = stage;
         this.gameClient = gameClient;
         this.gameState = gameState;
         this.playerColor = playerColor;
         this.opponentUsername = "Computer (" + aiDifficulty + ")";
+        this.playerUsername = gameClient.getUsername();
         this.isAIGame = true;
         this.aiDifficulty = aiDifficulty;
         
@@ -99,15 +100,15 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.backgroundMusic = new AudioPlayer("somber_background.mp3");
     }
     
-    /**
-     * Constructor for AI game with username and difficulty.
-     */
+    // 
+// Constructor for AI game with username and difficulty.
     public GameScreen(Stage stage, GameClient gameClient, String username, String opponentLabel, String aiDifficulty) {
         this.stage = stage;
         this.gameClient = gameClient;
         this.isAIGame = true;
         this.aiDifficulty = aiDifficulty; // Use provided difficulty
         this.opponentUsername = opponentLabel;
+        this.playerUsername = username;
         
         // Create a new local game state
         this.gameState = new GameState(username, "Computer");
@@ -123,13 +124,12 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.backgroundMusic = new AudioPlayer("somber_background.mp3");
     }
     
-    /**
-     * Shows the game screen.
-     */
+    // 
+// Shows the game screen.
     public void show() {
         // Create the root layout
         rootLayout = new BorderPane();
-        rootLayout.setStyle("-fx-background-color: white;");
+        rootLayout.setStyle("-fx-background-color: #F7F5F2;");
         rootLayout.setPadding(new Insets(0, 30, 0, 30)); // Add left and right margin
         
         // Create the game board
@@ -139,9 +139,9 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         VBox infoPanel = createInfoPanel();
         rootLayout.setTop(infoPanel);
         
-        // Create the chat panel
+        // Create the chat panel and place it to the right of the board
         VBox chatPanel = createChatPanel();
-        rootLayout.setBottom(chatPanel);
+        rootLayout.setRight(chatPanel);
         
         // Create scene
         Scene scene = new Scene(rootLayout, 800, 600);
@@ -164,9 +164,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Creates the game board UI.
-     */
+    // 
+// Creates the game board UI.
     private void createGameBoard() {
         boardGrid = new GridPane();
         boardGrid.setAlignment(Pos.CENTER);
@@ -206,11 +205,10 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         rootLayout.setCenter(boardContainer);
     }
     
-    /**
-     * Creates the info panel showing game status and turn information.
-     * 
-     * @return The info panel
-     */
+    // 
+// Creates the info panel showing game status and turn information.
+// 
+// @return The info panel
     private VBox createInfoPanel() {
         VBox infoPanel = new VBox(10);
         infoPanel.setPadding(new Insets(10));
@@ -286,21 +284,21 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         return infoPanel;
     }
     
-    /**
-     * Creates the chat panel.
-     * 
-     * @return The chat panel
-     */
+    // 
+// Creates the chat panel.
+// 
+// @return The chat panel
     private VBox createChatPanel() {
-        VBox chatPanel = new VBox(5);
+        VBox chatPanel = new VBox(8);
         chatPanel.setPadding(new Insets(10));
-        chatPanel.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 1 0 0 0;");
+        chatPanel.setPrefWidth(300);
+        chatPanel.setStyle("-fx-background-color: white; -fx-border-color: #CCCCCC; -fx-border-width: 0 0 0 1;");
         
-        Label chatLabel = new Label("Chat");
-        chatLabel.setStyle("-fx-font-weight: bold;");
+        Label chatLabel = new Label("GameChat");
+        chatLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #444444;");
         
         chatFlow = new TextFlow();
-        chatFlow.setPrefHeight(100);
+        chatFlow.setPrefHeight(300);
         
         ScrollPane chatScroll = new ScrollPane(chatFlow);
         chatScroll.setFitToWidth(true);
@@ -323,11 +321,10 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         return chatPanel;
     }
     
-    /**
-     * Makes a move in the specified column.
-     * 
-     * @param column The column in which to make the move
-     */
+    // 
+// Makes a move in the specified column.
+// 
+// @param column The column in which to make the move
     private void makeMove(int column) {
         // Check if it's the player's turn
         boolean isPlayerTurn = (!isAIGame && gameState.getCurrentTurn() == playerColor) || 
@@ -364,9 +361,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Makes a move for the AI player.
-     */
+    // 
+// Makes a move for the AI player.
     private void makeAIMove() {
         if (gameState.getStatus() == GameStatus.IN_PROGRESS && isAITurn) {
             int column = aiPlayer.getBestMove(gameState);
@@ -384,9 +380,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Sends a chat message.
-     */
+    // 
+// Sends a chat message.
     private void sendChatMessage() {
         String message = chatInput.getText().trim();
         
@@ -396,9 +391,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Updates the game board to reflect the current game state.
-     */
+    // 
+// Updates the game board to reflect the current game state.
     private void updateBoard() {
         System.out.println("Updating board UI from game state...");
         for (int row = 0; row < GameState.ROWS; row++) {
@@ -424,9 +418,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         boardGrid.requestLayout();
     }
     
-    /**
-     * Updates the game status and turn information.
-     */
+    // 
+// Updates the game status and turn information.
     private void updateGameStatus() {
         boolean isPlayerTurn = (!isAIGame && gameState.getCurrentTurn() == playerColor) || 
                                (isAIGame && !isAITurn);
@@ -446,6 +439,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         // For AI games, show who actually won
                         if (playerColor == PlayerColor.RED) {
                             turnLabel.setText("You win!");
+                            com.connectfour.client.util.Leaderboard.recordWin(playerUsername);
                         } else {
                             turnLabel.setText("Computer wins!");
                         }
@@ -453,6 +447,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         // For online games
                         if (playerColor == PlayerColor.RED) {
                             turnLabel.setText("You win!");
+                            com.connectfour.client.util.Leaderboard.recordWin(playerUsername);
                         } else {
                             turnLabel.setText("Opponent wins!");
                         }
@@ -464,6 +459,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         // For AI games, show who actually won
                         if (playerColor == PlayerColor.YELLOW) {
                             turnLabel.setText("You win!");
+                            com.connectfour.client.util.Leaderboard.recordWin(playerUsername);
                         } else {
                             turnLabel.setText("Computer wins!");
                         }
@@ -471,6 +467,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
                         // For online games
                         if (playerColor == PlayerColor.YELLOW) {
                             turnLabel.setText("You win!");
+                            com.connectfour.client.util.Leaderboard.recordWin(playerUsername);
                         } else {
                             turnLabel.setText("Opponent wins!");
                         }
@@ -490,9 +487,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Shows the play again buttons.
-     */
+    // 
+// Shows the play again buttons.
     private void showPlayAgainButtons() {
         if (gameOverButtonsBox != null) {
             gameOverButtonsBox.setVisible(true);
@@ -503,11 +499,10 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         backgroundMusic.stop();
     }
     
-    /**
-     * Requests to play again or decline a rematch.
-     * 
-     * @param wantToPlayAgain Whether the player wants to play again
-     */
+    // 
+// Requests to play again or decline a rematch.
+// 
+// @param wantToPlayAgain Whether the player wants to play again
     private void requestPlayAgain(boolean wantToPlayAgain) {
         if (isAIGame) {
             if (wantToPlayAgain) {
@@ -534,9 +529,8 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         }
     }
     
-    /**
-     * Returns to the lobby screen.
-     */
+    // 
+// Returns to the lobby screen.
     private void returnToLobby() {
         // Stop background music when returning to lobby
         if (backgroundMusic != null) {
@@ -564,6 +558,7 @@ public class GameScreen implements GameClient.GameStateListener, GameClient.Conn
         this.gameState = gameState;
         this.playerColor = assignedColor;
         this.opponentUsername = opponentUsername;
+        this.playerUsername = gameClient.getUsername();
         
         updateBoard();
         updateGameStatus();

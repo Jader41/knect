@@ -16,9 +16,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Handles network communication with the server.
- */
+// 
+// Handles network communication with the server.
 public class GameClient {
     private final String host;
     private final int port;
@@ -48,11 +47,10 @@ public class GameClient {
         this.chatMessageListeners = new CopyOnWriteArrayList<>();
     }
     
-    /**
-     * Connects to the server and attempts to log in with the given username.
-     * 
-     * @param username The username to use for login
-     */
+    // 
+// Connects to the server and attempts to log in with the given username.
+// 
+// @param username The username to use for login
     public void connect(String username) {
         if (connected) {
             return;
@@ -85,11 +83,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Disconnects from the server with an optional reason.
-     * 
-     * @param reason The reason for disconnection
-     */
+    // 
+// Disconnects from the server with an optional reason.
+// 
+// @param reason The reason for disconnection
     public void disconnect(String reason) {
         if (!connected) {
             return;
@@ -106,9 +103,8 @@ public class GameClient {
         }
     }
     
-    /**
-     * Cleans up resources.
-     */
+    // 
+// Cleans up resources.
     private void cleanup() {
         // Set connected to false first to prevent recursive cleanup calls
         boolean wasConnected = connected;
@@ -137,9 +133,8 @@ public class GameClient {
         }
     }
     
-    /**
-     * Starts listening for messages from the server.
-     */
+    // 
+// Starts listening for messages from the server.
     private void startListening() {
         executor.execute(() -> {
             try {
@@ -165,11 +160,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Handles a message received from the server.
-     * 
-     * @param message The message to handle
-     */
+    // 
+// Handles a message received from the server.
+// 
+// @param message The message to handle
     private void handleMessage(Message message) {
         switch (message.getType()) {
             case LOGIN_RESPONSE:
@@ -195,11 +189,10 @@ public class GameClient {
         }
     }
     
-    /**
-     * Handles a login response message.
-     * 
-     * @param message The login response message
-     */
+    // 
+// Handles a login response message.
+// 
+// @param message The login response message
     private void handleLoginResponse(LoginResponseMessage message) {
         if (message.isSuccess()) {
             notifyLoginSuccessful();
@@ -208,11 +201,10 @@ public class GameClient {
         }
     }
     
-    /**
-     * Handles a game start message.
-     * 
-     * @param message The game start message
-     */
+    // 
+// Handles a game start message.
+// 
+// @param message The game start message
     private void handleGameStart(GameStartMessage message) {
         this.currentGameState = message.getInitialState();
         this.assignedColor = message.getAssignedColor();
@@ -221,11 +213,10 @@ public class GameClient {
         notifyGameStarted(currentGameState, assignedColor, opponentUsername);
     }
     
-    /**
-     * Handles a game state update message.
-     * 
-     * @param message The game state update message
-     */
+    // 
+// Handles a game state update message.
+// 
+// @param message The game state update message
     private void handleGameStateUpdate(GameStateUpdateMessage message) {
         System.out.println("Received game state update from server:");
         System.out.println("  Current turn: " + message.getGameState().getCurrentTurn());
@@ -246,20 +237,18 @@ public class GameClient {
         notifyGameStateUpdated(currentGameState);
     }
     
-    /**
-     * Handles a chat message.
-     * 
-     * @param message The chat message
-     */
+    // 
+// Handles a chat message.
+// 
+// @param message The chat message
     private void handleChatMessage(ChatMessage message) {
         notifyChatMessageReceived(message);
     }
     
-    /**
-     * Handles a play again response message.
-     * 
-     * @param message The play again response message
-     */
+    // 
+// Handles a play again response message.
+// 
+// @param message The play again response message
     private void handlePlayAgainResponse(PlayAgainResponseMessage message) {
         if (message.bothWantToPlayAgain()) {
             // A new game will be started, wait for the game start message
@@ -270,21 +259,19 @@ public class GameClient {
         }
     }
     
-    /**
-     * Handles a disconnect message.
-     * 
-     * @param message The disconnect message
-     */
+    // 
+// Handles a disconnect message.
+// 
+// @param message The disconnect message
     private void handleDisconnect(DisconnectMessage message) {
         System.out.println("Disconnected from server: " + message.getReason());
         cleanup();
     }
     
-    /**
-     * Sends a message to the server.
-     * 
-     * @param message The message to send
-     */
+    // 
+// Sends a message to the server.
+// 
+// @param message The message to send
     private void sendMessage(Message message) {
         if (connected && outputStream != null) {
             try {
@@ -297,43 +284,38 @@ public class GameClient {
         }
     }
     
-    /**
-     * Makes a move in the specified column.
-     * 
-     * @param column The column in which to drop the piece (0-based index)
-     */
+    // 
+// Makes a move in the specified column.
+// 
+// @param column The column in which to drop the piece (0-based index)
     public void makeMove(int column) {
         sendMessage(new MoveMessage(column));
     }
     
-    /**
-     * Sends a chat message.
-     * 
-     * @param content The content of the message
-     */
+    // 
+// Sends a chat message.
+// 
+// @param content The content of the message
     public void sendChatMessage(String content) {
         sendMessage(new ChatMessage(username, content));
     }
     
-    /**
-     * Requests to play again.
-     * 
-     * @param wantToPlayAgain Whether the player wants to play again
-     */
+    // 
+// Requests to play again.
+// 
+// @param wantToPlayAgain Whether the player wants to play again
     public void requestPlayAgain(boolean wantToPlayAgain) {
         sendMessage(new PlayAgainRequestMessage(wantToPlayAgain));
     }
     
-    /**
-     * Requests to return to the lobby.
-     */
+    // 
+// Requests to return to the lobby.
     public void returnToLobby() {
         sendMessage(new ReturnToLobbyMessage());
     }
     
-    /**
-     * Interface for connection-related events.
-     */
+    // 
+// Interface for connection-related events.
     public interface ConnectionListener {
         void onConnectionEstablished();
         void onConnectionFailed(String reason);
@@ -342,9 +324,8 @@ public class GameClient {
         void onLoginFailed(String reason);
     }
     
-    /**
-     * Interface for game state-related events.
-     */
+    // 
+// Interface for game state-related events.
     public interface GameStateListener {
         void onGameStarted(GameState gameState, PlayerColor assignedColor, String opponentUsername);
         void onGameStateUpdated(GameState gameState);
@@ -352,70 +333,62 @@ public class GameClient {
         void onOpponentDeclinedRematch();
     }
     
-    /**
-     * Interface for chat message-related events.
-     */
+    // 
+// Interface for chat message-related events.
     public interface ChatMessageListener {
         void onChatMessageReceived(ChatMessage message);
     }
     
-    /**
-     * Adds a connection listener.
-     * 
-     * @param listener The listener to add
-     */
+    // 
+// Adds a connection listener.
+// 
+// @param listener The listener to add
     public void addConnectionListener(ConnectionListener listener) {
         connectionListeners.add(listener);
     }
     
-    /**
-     * Removes a connection listener.
-     * 
-     * @param listener The listener to remove
-     */
+    // 
+// Removes a connection listener.
+// 
+// @param listener The listener to remove
     public void removeConnectionListener(ConnectionListener listener) {
         connectionListeners.remove(listener);
     }
     
-    /**
-     * Adds a game state listener.
-     * 
-     * @param listener The listener to add
-     */
+    // 
+// Adds a game state listener.
+// 
+// @param listener The listener to add
     public void addGameStateListener(GameStateListener listener) {
         gameStateListeners.add(listener);
     }
     
-    /**
-     * Removes a game state listener.
-     * 
-     * @param listener The listener to remove
-     */
+    // 
+// Removes a game state listener.
+// 
+// @param listener The listener to remove
     public void removeGameStateListener(GameStateListener listener) {
         gameStateListeners.remove(listener);
     }
     
-    /**
-     * Adds a chat message listener.
-     * 
-     * @param listener The listener to add
-     */
+    // 
+// Adds a chat message listener.
+// 
+// @param listener The listener to add
     public void addChatMessageListener(ChatMessageListener listener) {
         chatMessageListeners.add(listener);
     }
     
-    /**
-     * Removes a chat message listener.
-     * 
-     * @param listener The listener to remove
-     */
+    // 
+// Removes a chat message listener.
+// 
+// @param listener The listener to remove
     public void removeChatMessageListener(ChatMessageListener listener) {
         chatMessageListeners.remove(listener);
     }
     
-    /**
-     * Notifies all connection listeners that the connection was established.
-     */
+    // 
+// Notifies all connection listeners that the connection was established.
     private void notifyConnectionEstablished() {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -429,11 +402,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all connection listeners that the connection failed.
-     * 
-     * @param reason The reason for the failure
-     */
+    // 
+// Notifies all connection listeners that the connection failed.
+// 
+// @param reason The reason for the failure
     private void notifyConnectionFailed(String reason) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -447,11 +419,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all connection listeners that the connection was closed.
-     * 
-     * @param reason The reason for the disconnection
-     */
+    // 
+// Notifies all connection listeners that the connection was closed.
+// 
+// @param reason The reason for the disconnection
     private void notifyDisconnected(String reason) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -465,9 +436,8 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all connection listeners that the login was successful.
-     */
+    // 
+// Notifies all connection listeners that the login was successful.
     private void notifyLoginSuccessful() {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -481,11 +451,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all connection listeners that the login failed.
-     * 
-     * @param reason The reason for the failure
-     */
+    // 
+// Notifies all connection listeners that the login failed.
+// 
+// @param reason The reason for the failure
     private void notifyLoginFailed(String reason) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -499,13 +468,12 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all game state listeners that a game has started.
-     * 
-     * @param gameState The initial game state
-     * @param assignedColor The color assigned to the player
-     * @param opponentUsername The username of the opponent
-     */
+    // 
+// Notifies all game state listeners that a game has started.
+// 
+// @param gameState The initial game state
+// @param assignedColor The color assigned to the player
+// @param opponentUsername The username of the opponent
     private void notifyGameStarted(GameState gameState, PlayerColor assignedColor, String opponentUsername) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -519,11 +487,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all game state listeners that the game state was updated.
-     * 
-     * @param gameState The updated game state
-     */
+    // 
+// Notifies all game state listeners that the game state was updated.
+// 
+// @param gameState The updated game state
     private void notifyGameStateUpdated(GameState gameState) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -537,9 +504,8 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all game state listeners that the opponent disconnected.
-     */
+    // 
+// Notifies all game state listeners that the opponent disconnected.
     private void notifyOpponentDisconnected() {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -553,9 +519,8 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all game state listeners that the opponent declined a rematch.
-     */
+    // 
+// Notifies all game state listeners that the opponent declined a rematch.
     private void notifyOpponentDeclinedRematch() {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -569,11 +534,10 @@ public class GameClient {
         });
     }
     
-    /**
-     * Notifies all chat message listeners that a chat message was received.
-     * 
-     * @param message The chat message
-     */
+    // 
+// Notifies all chat message listeners that a chat message was received.
+// 
+// @param message The chat message
     private void notifyChatMessageReceived(ChatMessage message) {
         Platform.runLater(() -> {
             // CopyOnWriteArrayList is thread-safe and doesn't throw ConcurrentModificationException
@@ -587,54 +551,48 @@ public class GameClient {
         });
     }
     
-    /**
-     * Gets the current game state.
-     * 
-     * @return The current game state
-     */
+    // 
+// Gets the current game state.
+// 
+// @return The current game state
     public GameState getCurrentGameState() {
         return currentGameState;
     }
     
-    /**
-     * Gets the color assigned to the player.
-     * 
-     * @return The assigned color
-     */
+    // 
+// Gets the color assigned to the player.
+// 
+// @return The assigned color
     public PlayerColor getAssignedColor() {
         return assignedColor;
     }
     
-    /**
-     * Gets the username of the opponent.
-     * 
-     * @return The opponent's username
-     */
+    // 
+// Gets the username of the opponent.
+// 
+// @return The opponent's username
     public String getOpponentUsername() {
         return opponentUsername;
     }
     
-    /**
-     * Returns the user's username.
-     * 
-     * @return The username
-     */
+    // 
+// Returns the user's username.
+// 
+// @return The username
     public String getUsername() {
         return username;
     }
     
-    /**
-     * Returns whether the client is connected to the server.
-     * 
-     * @return true if connected, false otherwise
-     */
+    // 
+// Returns whether the client is connected to the server.
+// 
+// @return true if connected, false otherwise
     public boolean isConnected() {
         return connected;
     }
     
-    /**
-     * Cancels matchmaking with the server.
-     */
+    // 
+// Cancels matchmaking with the server.
     public void cancelMatchmaking() {
         if (connected) {
             try {

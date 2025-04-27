@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent between client and server for chat functionality.
- */
+// 
+// Message sent between client and server for chat functionality.
 public class ChatMessage extends Message {
     private static final long serialVersionUID = 1L;
     

@@ -1,8 +1,7 @@
 package com.connectfour.common.messages;
 
-/**
- * Message sent from server to client in response to a play again request.
- */
+// 
+// Message sent from server to client in response to a play again request.
 public class PlayAgainResponseMessage extends Message {
     private static final long serialVersionUID = 1L;
     

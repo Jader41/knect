@@ -2,9 +2,8 @@ package com.connectfour.common.messages;
 
 import java.io.Serializable;
 
-/**
- * Enum defining the different types of messages that can be exchanged.
- */
+// 
+// Enum defining the different types of messages that can be exchanged.
 public enum MessageType implements Serializable {
     LOGIN_REQUEST,
     LOGIN_RESPONSE,

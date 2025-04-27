@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * AI player for Connect Four with three difficulty levels.
- */
+// 
+// AI player for Connect Four with three difficulty levels.
 public class AIPlayer {
     public enum Difficulty {
         EASY, MEDIUM, HARD
@@ -21,12 +20,11 @@ public class AIPlayer {
     private final PlayerColor aiColor;
     private final PlayerColor playerColor;
     
-    /**
-     * Creates a new AI player with the specified difficulty.
-     * 
-     * @param difficultyStr The difficulty as a string
-     * @param aiColor The color assigned to the AI
-     */
+    // 
+// Creates a new AI player with the specified difficulty.
+// 
+// @param difficultyStr The difficulty as a string
+// @param aiColor The color assigned to the AI
     public AIPlayer(String difficultyStr, PlayerColor aiColor) {
         this.difficulty = getDifficultyFromString(difficultyStr);
         this.aiColor = aiColor;
@@ -34,12 +32,11 @@ public class AIPlayer {
         this.random = new Random();
     }
     
-    /**
-     * Converts a string difficulty to the corresponding enum value.
-     * 
-     * @param difficultyStr The difficulty as a string
-     * @return The difficulty enum value
-     */
+    // 
+// Converts a string difficulty to the corresponding enum value.
+// 
+// @param difficultyStr The difficulty as a string
+// @return The difficulty enum value
     private Difficulty getDifficultyFromString(String difficultyStr) {
         if ("Medium".equalsIgnoreCase(difficultyStr)) {
             return Difficulty.MEDIUM;
@@ -50,12 +47,11 @@ public class AIPlayer {
         }
     }
     
-    /**
-     * Gets the best move for the AI based on the current game state.
-     * 
-     * @param gameState The current game state
-     * @return The column to make a move in (0-based index)
-     */
+    // 
+// Gets the best move for the AI based on the current game state.
+// 
+// @param gameState The current game state
+// @return The column to make a move in (0-based index)
     public int getBestMove(GameState gameState) {
         switch (difficulty) {
             case MEDIUM:
@@ -68,25 +64,23 @@ public class AIPlayer {
         }
     }
     
-    /**
-     * Gets a random valid move (Easy difficulty).
-     * 
-     * @param gameState The current game state
-     * @return The column to make a move in
-     */
+    // 
+// Gets a random valid move (Easy difficulty).
+// 
+// @param gameState The current game state
+// @return The column to make a move in
     private int getEasyMove(GameState gameState) {
         List<Integer> validMoves = getValidMoves(gameState);
         return validMoves.get(random.nextInt(validMoves.size()));
     }
     
-    /**
-     * Gets a semi-intelligent move (Medium difficulty).
-     * Plays a winning move if possible, or blocks the opponent from winning.
-     * Otherwise, plays a random move.
-     * 
-     * @param gameState The current game state
-     * @return The column to make a move in
-     */
+    // 
+// Gets a semi-intelligent move (Medium difficulty).
+// Plays a winning move if possible, or blocks the opponent from winning.
+// Otherwise, plays a random move.
+// 
+// @param gameState The current game state
+// @return The column to make a move in
     private int getMediumMove(GameState gameState) {
         // Check for winning moves
         List<Integer> validMoves = getValidMoves(gameState);
@@ -125,13 +119,12 @@ public class AIPlayer {
         return validMoves.get(random.nextInt(validMoves.size()));
     }
     
-    /**
-     * Gets the optimal move using a more advanced strategy (Hard difficulty).
-     * Uses a simple minimax algorithm with a limited depth.
-     * 
-     * @param gameState The current game state
-     * @return The column to make a move in
-     */
+    // 
+// Gets the optimal move using a more advanced strategy (Hard difficulty).
+// Uses a simple minimax algorithm with a limited depth.
+// 
+// @param gameState The current game state
+// @return The column to make a move in
     private int getHardMove(GameState gameState) {
         List<Integer> validMoves = getValidMoves(gameState);
         
@@ -199,12 +192,11 @@ public class AIPlayer {
         return validMoves.get(random.nextInt(validMoves.size()));
     }
     
-    /**
-     * Gets a list of valid moves (columns where a piece can be placed).
-     * 
-     * @param gameState The current game state
-     * @return List of valid column indexes
-     */
+    // 
+// Gets a list of valid moves (columns where a piece can be placed).
+// 
+// @param gameState The current game state
+// @return List of valid column indexes
     private List<Integer> getValidMoves(GameState gameState) {
         List<Integer> validMoves = new ArrayList<>();
         
@@ -217,14 +209,13 @@ public class AIPlayer {
         return validMoves;
     }
     
-    /**
-     * Checks if a move would result in a win based on the game state.
-     * 
-     * @param gameState The game state
-     * @param column The column of the last move
-     * @param color The player color to check for win
-     * @return true if the move resulted in a win, false otherwise
-     */
+    // 
+// Checks if a move would result in a win based on the game state.
+// 
+// @param gameState The game state
+// @param column The column of the last move
+// @param color The player color to check for win
+// @return true if the move resulted in a win, false otherwise
     private boolean checkForWin(GameState gameState, int column, PlayerColor color) {
         // Find the row of the last move
         int row = -1;
@@ -246,15 +237,14 @@ public class AIPlayer {
         return checkForWinAtPosition(board, row, column, piece);
     }
     
-    /**
-     * Checks if there's a win at a specific position.
-     * 
-     * @param board The game board
-     * @param row The row to check
-     * @param col The column to check
-     * @param playerPiece The player's piece type
-     * @return true if there's a win, false otherwise
-     */
+    // 
+// Checks if there's a win at a specific position.
+// 
+// @param board The game board
+// @param row The row to check
+// @param col The column to check
+// @param playerPiece The player's piece type
+// @return true if there's a win, false otherwise
     private boolean checkForWinAtPosition(CellState[][] board, int row, int col, CellState playerPiece) {
         // Check horizontal
         int count = 0;
@@ -331,13 +321,12 @@ public class AIPlayer {
         return false;
     }
     
-    /**
-     * Gets the row where a piece would land if dropped in the specified column.
-     * 
-     * @param gameState The game state
-     * @param column The column to check
-     * @return The row where the piece would land, or -1 if the column is full
-     */
+    // 
+// Gets the row where a piece would land if dropped in the specified column.
+// 
+// @param gameState The game state
+// @param column The column to check
+// @return The row where the piece would land, or -1 if the column is full
     private int getRowForMove(GameState gameState, int column) {
         for (int row = GameState.ROWS - 1; row >= 0; row--) {
             if (gameState.getCellState(row, column) == CellState.EMPTY) {
@@ -347,12 +336,11 @@ public class AIPlayer {
         return -1; // Column is full
     }
     
-    /**
-     * Checks if the board is empty (first move of the game).
-     * 
-     * @param gameState The game state
-     * @return true if the board is empty, false otherwise
-     */
+    // 
+// Checks if the board is empty (first move of the game).
+// 
+// @param gameState The game state
+// @return true if the board is empty, false otherwise
     private boolean isBoardEmpty(GameState gameState) {
         for (int row = 0; row < GameState.ROWS; row++) {
             for (int col = 0; col < GameState.COLUMNS; col++) {
@@ -364,13 +352,12 @@ public class AIPlayer {
         return true;
     }
     
-    /**
-     * Checks if a player has three pieces in a row (used for threat detection).
-     * 
-     * @param gameState The game state
-     * @param color The player color to check
-     * @return true if there are three pieces in a row, false otherwise
-     */
+    // 
+// Checks if a player has three pieces in a row (used for threat detection).
+// 
+// @param gameState The game state
+// @param color The player color to check
+// @return true if there are three pieces in a row, false otherwise
     private boolean hasThreeInARow(GameState gameState, PlayerColor color) {
         CellState piece = (color == PlayerColor.RED) ? CellState.RED : CellState.YELLOW;
         CellState[][] board = getBoardFromGameState(gameState);
@@ -438,12 +425,11 @@ public class AIPlayer {
         return false;
     }
     
-    /**
-     * Creates a 2D array representing the board from the game state.
-     * 
-     * @param gameState The game state
-     * @return 2D array representing the board
-     */
+    // 
+// Creates a 2D array representing the board from the game state.
+// 
+// @param gameState The game state
+// @return 2D array representing the board
     private CellState[][] getBoardFromGameState(GameState gameState) {
         CellState[][] board = new CellState[GameState.ROWS][GameState.COLUMNS];
         for (int row = 0; row < GameState.ROWS; row++) {

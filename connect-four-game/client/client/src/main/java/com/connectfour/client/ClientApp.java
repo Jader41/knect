@@ -5,9 +5,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-/**
- * Main entry point for the Connect Four client application.
- */
+// 
+// Main entry point for the Connect Four client application.
 public class ClientApp extends Application {
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 8080;
