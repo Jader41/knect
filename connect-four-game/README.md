@@ -73,7 +73,7 @@ Use Maven's JavaFX plugin to run the client:
 ```
 cd /path/to/connect-four-game/client/client
 mvn javafx:run
-```
+``` 
 
 Example:
 ```
