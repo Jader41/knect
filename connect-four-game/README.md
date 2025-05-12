@@ -117,7 +117,7 @@ To test multiplayer functionality, you can run multiple client instances in sepa
 - The first player to form a horizontal, vertical, or diagonal line of four discs wins
 - If the grid is filled completely without a winner, the game is a draw
 
-## Game Controls
+## Game Controls 
 
 - Click on a column to drop your disc during your turn
 - Use the chat box at the bottom to send messages in online matches
